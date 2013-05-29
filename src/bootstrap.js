@@ -3,7 +3,7 @@
 	/**
 	 * Throwback likes to be in control of jQuery.
 	 */
-	if (window && window.$ && window.jQuery === window.$){
-		window.$.noConflict();
-		var $ = window.jQuery;
+	if (this.$ && this.jQuery === this.$){
+		this.$.noConflict();
+		var $ = this.jQuery;
 	}

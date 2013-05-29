@@ -26,6 +26,7 @@ module.exports = function(grunt) {
             'src/throwback.js',
             'src/bootstrap.js',
             'src/base.js',
+            'src/node.js',
             'src/export.js',
             'src/outro.js'
         ],
@@ -65,10 +66,11 @@ module.exports = function(grunt) {
         },
         jasmine : {
             tests : {
-                src : ['dist/', '.min.js'].join(config.versioned),
+                src : ['dist/', '.js'].join(config.versioned),
                 options : {
                     specs : 'test/spec/*.spec.js',
-                    template : 'test/grunt.tmpl'
+                    template : 'test/grunt.tmpl',
+                    vendor : 'http://ajax.googleapis.com/ajax/libs/jquery/2.0.1/jquery.min.js'
                 }
             }
         },
