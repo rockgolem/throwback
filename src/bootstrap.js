@@ -1,9 +1,9 @@
-	/* globals Throwback */
+	/* globals Throwback, $:true */
 
 	/**
 	 * Throwback likes to be in control of jQuery.
 	 */
 	if (window && window.$ && window.jQuery === window.$){
 		window.$.noConflict();
-		Throwback.$ = window.jQuery;
+		var $ = window.jQuery;
 	}

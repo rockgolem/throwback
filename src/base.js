@@ -7,7 +7,7 @@
 	 * @return Object
 	 */
 	Base.extend = function(properties, statics) {
-		var parent, child;
+		var child, parent, Surrogate;
 
 		parent = this;
 
@@ -16,4 +16,17 @@
 		} else {
 			child = function(){ return parent.apply(this, arguments); };
 		}
+
+		$.extend(child, parent, statics);
+
+		Surrogate = function(){ this.constructor = child; };
+		Surrogate.prototype = parent.prototype;
+		child.prototype = new Surrogate();
+		child.__super__ = parent.prototype;
+
+		if (properties){
+			$.extend(child.prototype, properties);
+		}
+
+		return child;
 	};
