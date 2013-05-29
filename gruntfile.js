@@ -23,9 +23,9 @@ module.exports = function(grunt) {
 
         sources : [
             'src/intro.js',
-
-            // add'l packages
-
+            'src/throwback.js',
+            'src/bootstrap.js',
+            'src/base.js',
             'src/export.js',
             'src/outro.js'
         ],
