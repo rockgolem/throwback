@@ -1,5 +1,6 @@
+    /* globals Throwback */
     if (typeof exports !== 'undefined' && typeof module !== 'undefined' && module.exports) {
-        // exports = module.exports = ProjectName;
+        exports = module.exports = Throwback;
     } else {
-        // this.ProjectName = ProjectName;
+        this.Throwback = Throwback;
     }
