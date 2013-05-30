@@ -11,9 +11,9 @@
 /**
 	 * Throwback likes to be in control of jQuery.
 	 */
-	if (window && window.$ && window.jQuery === window.$){
-		window.$.noConflict();
-		var $ = window.jQuery;
+	if (this.$ && this.jQuery === this.$){
+		this.$.noConflict();
+		var $ = this.jQuery;
 	}
 var Base = Throwback.Base = function(){};
 
@@ -46,6 +46,7 @@ var Base = Throwback.Base = function(){};
 
 		return child;
 	};
+var Node = Throwback.Node = Base.extend();
 if (typeof exports !== 'undefined' && typeof module !== 'undefined' && module.exports) {
         exports = module.exports = Throwback;
     } else {
