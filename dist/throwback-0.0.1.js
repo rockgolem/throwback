@@ -50,6 +50,11 @@ var Base = Throwback.Base = function(){};
 		constructor : function(){}
 	});
 var Node = Throwback.Node = Base.extend();
+var Entity = Throwback.Entity = Node.extend();
+var Group = Throwback.Group = Node.extend();
+var Layer = Throwback.Layer = Node.extend();
+var Scene = Throwback.Scene = Node.extend();
+var Stage = Throwback.Stage = Node.extend();
 if (typeof exports !== 'undefined' && typeof module !== 'undefined' && module.exports) {
         exports = module.exports = Throwback;
     } else {
