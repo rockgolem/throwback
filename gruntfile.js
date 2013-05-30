@@ -22,13 +22,13 @@ module.exports = function(grunt) {
         ].join(''),
 
         sources : [
-            'src/intro.js',
+            'src/chrome/intro.js',
             'src/throwback.js',
-            'src/bootstrap.js',
+            'src/chrome/bootstrap.js',
             'src/base.js',
             'src/node.js',
-            'src/export.js',
-            'src/outro.js'
+            'src/chrome/export.js',
+            'src/chrome/outro.js'
         ],
         pkg : pkg,
         uglifyFiles : {}
