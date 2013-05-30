@@ -44,6 +44,7 @@ module.exports = function(grunt) {
     // setup dynamic filenames
     config.versioned = [config.pkg.name, config.pkg.version].join('-');
     config.dist = ['dist/', '.js'].join(config.versioned);
+    config.example = ['examples/js/', '-latest.js'].join(config.pkg.name);
     config.uglifyFiles[['dist/', '.min.js'].join(config.versioned)] = config.dist;
 
     // Project configuration.
@@ -63,6 +64,13 @@ module.exports = function(grunt) {
             dist : {
                 src : config.sources,
                 dest : config.dist
+            }
+        },
+        copy : {
+            example : {
+                files : [
+                    { 'examples/js/throwback-latest.js' : config.dist }
+                ]
             }
         },
         uglify : {
@@ -97,5 +105,5 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
 
     // Default task.
-    grunt.registerTask('default', ['clean', 'concat', 'jshint', 'uglify', 'jasmine']);
+    grunt.registerTask('default', ['clean', 'concat', 'jshint', 'copy', 'uglify', 'jasmine']);
 };
