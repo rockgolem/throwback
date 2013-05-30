@@ -1,20 +1,13 @@
 /**
- * throwback v0.0.1 - 2013-05-29
+ * throwback v0.0.1 - 2013-05-30
  * Retro Game Rendering Engine
  *
  * Copyright (c) 2013 Stephen Young <steve@rockgolem.com>
  * Licensed MIT
  */
-;(function(undefined){
+;(function(jQuery, undefined){
     "use strict";
 	var Throwback = {};
-/**
-	 * Throwback likes to be in control of jQuery.
-	 */
-	if (this.$ && this.jQuery === this.$){
-		this.$.noConflict();
-		var $ = this.jQuery;
-	}
 var Base = Throwback.Base = function(){};
 
 	/**
@@ -23,18 +16,18 @@ var Base = Throwback.Base = function(){};
 	 * @return Object
 	 */
 	Base.extend = function(properties, statics) {
-		var child, parent, Surrogate;
+		var child, parent, Surrogate, $;
 
 		parent = this;
 
-		if (properties && typeof properties.constructor === 'function'){
+		if (properties && properties.hasOwnProperty('constructor')){
 			child = properties.constructor;
 		} else {
 			child = function(){ return parent.apply(this, arguments); };
 		}
 
+		$ = Throwback.jQuery;
 		$.extend(child, parent, statics);
-
 		Surrogate = function(){ this.constructor = child; };
 		Surrogate.prototype = parent.prototype;
 		child.prototype = new Surrogate();
@@ -46,10 +39,20 @@ var Base = Throwback.Base = function(){};
 
 		return child;
 	};
+/**
+	 * Discourage global use of jQuery
+	 */
+	if (jQuery){
+		Throwback.jQuery = jQuery.noConflict();
+	}
+
+	var Bootstrap = Throwback.Bootstrap = Base.extend({
+		constructor : function(){}
+	});
 var Node = Throwback.Node = Base.extend();
 if (typeof exports !== 'undefined' && typeof module !== 'undefined' && module.exports) {
         exports = module.exports = Throwback;
     } else {
         this.Throwback = Throwback;
     }
-}).call(this);
+}).call(this, this.jQuery);
