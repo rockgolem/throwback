@@ -1,9 +1,12 @@
-	/* globals Throwback, $:true */
+	/* globals Throwback, Base */
 
 	/**
-	 * Throwback likes to be in control of jQuery.
+	 * Discourage global use of jQuery
 	 */
-	if (this.$ && this.jQuery === this.$){
-		this.$.noConflict();
-		var $ = this.jQuery;
+	if (jQuery){
+		Throwback.jQuery = jQuery.noConflict();
 	}
+
+	var Bootstrap = Throwback.Bootstrap = Base.extend({
+		constructor : function(){}
+	});

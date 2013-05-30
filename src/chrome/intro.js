@@ -1,2 +1,2 @@
-;(function(undefined){
+;(function(jQuery, undefined){
     "use strict";

@@ -7,7 +7,7 @@
 	 * @return Object
 	 */
 	Base.extend = function(properties, statics) {
-		var child, parent, Surrogate;
+		var child, parent, Surrogate, $;
 
 		parent = this;
 
@@ -17,6 +17,7 @@
 			child = function(){ return parent.apply(this, arguments); };
 		}
 
+		$ = Throwback.jQuery;
 		$.extend(child, parent, statics);
 
 		Surrogate = function(){ this.constructor = child; };
