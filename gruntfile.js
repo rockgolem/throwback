@@ -28,6 +28,8 @@ module.exports = function(grunt) {
             'src/bootstrap.js',
             'src/node.js',
             'src/nodes/*',
+            'src/audio.js',
+            'src/audio/*',
             'src/chrome/export.js',
             'src/chrome/outro.js'
         ],
