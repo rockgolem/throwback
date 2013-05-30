@@ -26,7 +26,7 @@ module.exports = function(grunt) {
             'src/throwback.js',
             'src/base.js',
             'src/bootstrap.js',
-            'src/node.js',
+            'src/nodes/*',
             'src/chrome/export.js',
             'src/chrome/outro.js'
         ],
