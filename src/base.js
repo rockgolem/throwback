@@ -11,7 +11,7 @@
 
 		parent = this;
 
-		if (properties && typeof properties.constructor === 'function'){
+		if (properties && properties.hasOwnProperty('constructor')){
 			child = properties.constructor;
 		} else {
 			child = function(){ return parent.apply(this, arguments); };
@@ -19,7 +19,6 @@
 
 		$ = Throwback.jQuery;
 		$.extend(child, parent, statics);
-
 		Surrogate = function(){ this.constructor = child; };
 		Surrogate.prototype = parent.prototype;
 		child.prototype = new Surrogate();
