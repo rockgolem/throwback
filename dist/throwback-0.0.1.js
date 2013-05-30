@@ -49,12 +49,19 @@ var Base = Throwback.Base = function(){};
 	var Bootstrap = Throwback.Bootstrap = Base.extend({
 		constructor : function(){}
 	});
+var Timer = Throwback.Timer = Base.extend();
+var Game = Throwback.Game = Base.extend();
 var Node = Throwback.Node = Base.extend();
 var Entity = Throwback.Entity = Node.extend();
 var Group = Throwback.Group = Node.extend();
 var Layer = Throwback.Layer = Node.extend();
 var Scene = Throwback.Scene = Node.extend();
 var Stage = Throwback.Stage = Node.extend();
+var Animation = Throwback.Animation = Base.extend();
+var Sprite = Throwback.Sprite = Base.extend();
+var Audio = Throwback.Audio = Base.extend();
+var Music = Throwback.Music = Audio.extend();
+var Sound = Throwback.Sound = Audio.extend();
 if (typeof exports !== 'undefined' && typeof module !== 'undefined' && module.exports) {
         exports = module.exports = Throwback;
     } else {
