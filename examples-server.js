@@ -1,7 +1,3 @@
-var connect = require('connect'),
-	http = require('http'),
-	app = connect()
-		.use(connect.static('examples'))
-		.use(connect.directory('examples'));
+var connect = require('connect');
 
-http.createServer(app).listen(8080);
+connect(connect.static(__dirname + '/examples')).listen(8080);
