@@ -64,8 +64,9 @@ var Timer = Throwback.Timer = Base.extend();
 	 * @return void
 	 */
 	var Game = Throwback.Game = Base.extend({
-		constructor : function(){
-			this.stage = new Throwback.Stage();
+		constructor : function(config){
+			var options = Throwback.jQuery.extend({}, config);
+			this.stage = options.stage || new Throwback.Stage();
 		}
 	});
 var Node = Throwback.Node = Base.extend();

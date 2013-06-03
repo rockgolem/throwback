@@ -6,5 +6,11 @@ describe('Game', function(){
 			expect(game.stage).toBeDefined();
 			expect(game.stage).toEqual(jasmine.any(Throwback.Stage));
 		});
+		it('can accept an injected stage', function(){
+			var CustomStage = Throwback.Stage.extend(),
+				game = new Throwback.Game({ stage : new CustomStage() });
+
+			expect(game.stage).toEqual(jasmine.any(CustomStage));
+		});
 	});
 });
