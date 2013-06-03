@@ -1,5 +1,5 @@
 /**
- * throwback v0.0.1 - 2013-05-30
+ * throwback v0.0.1 - 2013-06-03
  * Retro Game Rendering Engine
  *
  * Copyright (c) 2013 Stephen Young <steve@rockgolem.com>
@@ -8,10 +8,15 @@
 ;(function(jQuery, undefined){
     "use strict";
 	var Throwback = {};
-var Base = Throwback.Base = function(){};
+/**
+	 * Base object.
+	 *
+	 * All Throwback constructors inherit from this object.
+	 */
+	var Base = Throwback.Base = function(){};
 
 	/**
-	 * Create subclass and correctly set up the prototype chain.
+	 * Create a subclass and correctly set up the prototype chain.
 	 *
 	 * @return Object
 	 */
@@ -50,7 +55,20 @@ var Base = Throwback.Base = function(){};
 		constructor : function(){}
 	});
 var Timer = Throwback.Timer = Base.extend();
-var Game = Throwback.Game = Base.extend();
+/**
+	 * Game object is the primary constructor
+	 *
+	 * It creates a stage and maintains the game loop
+	 *
+	 * @param Object
+	 * @return void
+	 */
+	var Game = Throwback.Game = Base.extend({
+		constructor : function(config){
+			var options = Throwback.jQuery.extend({}, config);
+			this.stage = options.stage || new Throwback.Stage();
+		}
+	});
 var Node = Throwback.Node = Base.extend();
 var Entity = Throwback.Entity = Node.extend();
 var Group = Throwback.Group = Node.extend();
