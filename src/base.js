@@ -1,8 +1,14 @@
 	/* globals Throwback */
+
+	/**
+	 * Base object.
+	 *
+	 * All Throwback constructors inherit from this object.
+	 */
 	var Base = Throwback.Base = function(){};
 
 	/**
-	 * Create subclass and correctly set up the prototype chain.
+	 * Create a subclass and correctly set up the prototype chain.
 	 *
 	 * @return Object
 	 */
