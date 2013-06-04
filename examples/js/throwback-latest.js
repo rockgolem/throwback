@@ -1,5 +1,5 @@
 /**
- * throwback v0.0.1 - 2013-06-03
+ * throwback v0.0.1 - 2013-06-04
  * Retro Game Rendering Engine
  *
  * Copyright (c) 2013 Stephen Young <steve@rockgolem.com>
@@ -7,7 +7,16 @@
  */
 ;(function(jQuery, undefined){
     "use strict";
-	var Throwback = {};
+var Throwback = {};
+
+	/**
+	 * A Collection of useful utility methods.
+	 */
+	Throwback.Util = {
+		uuid : function(){
+			return (Math.PI * Math.max(0.01, Math.random())).toString(36).substr(2);
+		}
+	};
 /**
 	 * Base object.
 	 *
@@ -74,9 +83,61 @@ var Entity = Throwback.Entity = Node.extend();
 var Group = Throwback.Group = Node.extend();
 var Layer = Throwback.Layer = Node.extend();
 var Scene = Throwback.Scene = Node.extend();
-var Stage = Throwback.Stage = Node.extend();
+var makeStageElement;
+
+	/**
+	 * The stage object keeps track of layers and represents the base element.
+	 */
+	var Stage = Throwback.Stage = Node.extend({
+		constructor : function(config){
+			var options = Throwback.jQuery.extend({}, config);
+			this.el = options.el || makeStageElement();
+		}
+	});
+
+	makeStageElement = function() {
+		var el = document.createElement('div');
+		Throwback.jQuery(el).appendTo('body');
+		return el;
+	};
 var Animation = Throwback.Animation = Base.extend();
-var Sprite = Throwback.Sprite = Base.extend();
+var imageCache, makeImage;
+
+	imageCache = {};
+
+	/**
+	 * Sprite object is a wrapper for an image.
+	 */
+	var Sprite = Throwback.Sprite = Base.extend({
+
+		/**
+		 * @param String filename
+		 * @return void
+		 */
+		constructor : function(filename){
+			this.setImage(filename);
+		},
+
+		/**
+		 * @param {[type]} filename [description]
+		 * @return {[type]}
+		 */
+		setImage : function(filename){
+			this.image = imageCache[filename] || (imageCache[filename] = makeImage(filename));
+		}
+	});
+
+	/**
+	 * Creates a new image object, and sets the src to filename.
+	 *
+	 * @param String filename
+	 * @return Image
+	 */
+	makeImage = function(filename){
+		var img = new Image();
+		img.src = filename;
+		return img;
+	};
 var Audio = Throwback.Audio = Base.extend();
 var Music = Throwback.Music = Audio.extend();
 var Sound = Throwback.Sound = Audio.extend();
