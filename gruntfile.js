@@ -85,7 +85,7 @@ module.exports = function(grunt) {
                 options : {
                     specs : 'test/spec/*.spec.js',
                     template : 'test/grunt.tmpl',
-                    vendor : 'http://ajax.googleapis.com/ajax/libs/jquery/2.0.1/jquery.min.js'
+                    vendor : 'lib/jquery.min.js'
                 }
             }
         },
