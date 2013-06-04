@@ -83,7 +83,7 @@ var Entity = Throwback.Entity = Node.extend();
 var Group = Throwback.Group = Node.extend();
 var Layer = Throwback.Layer = Node.extend();
 var Scene = Throwback.Scene = Node.extend();
-var makeStageElement;
+var generateStage;
 
 	/**
 	 * The stage object keeps track of layers and represents the base element.
@@ -91,13 +91,22 @@ var makeStageElement;
 	var Stage = Throwback.Stage = Node.extend({
 		constructor : function(config){
 			var options = Throwback.jQuery.extend({}, config);
-			this.el = options.el || makeStageElement();
+			this.el = options.el || generateStage(options.container);
 		}
 	});
 
-	makeStageElement = function() {
+	/**
+	 * Creates a stage object and appends it to the provided container, or to the body
+	 *
+	 * @param String container a selector
+	 * @return Object DOM Node
+	 */
+	generateStage = function(container) {
 		var el = document.createElement('div');
-		Throwback.jQuery(el).appendTo('body');
+		Throwback
+			.jQuery(el)
+			.css({ width : '100%', height : '100%' })
+			.appendTo(container || 'body');
 		return el;
 	};
 var Animation = Throwback.Animation = Base.extend();
