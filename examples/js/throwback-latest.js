@@ -1,5 +1,5 @@
 /**
- * throwback v0.0.1 - 2013-06-04
+ * throwback v0.0.1 - 2013-06-09
  * Retro Game Rendering Engine
  *
  * Copyright (c) 2013 Stephen Young <steve@rockgolem.com>
@@ -105,7 +105,7 @@ var generateStage;
 		var el = document.createElement('div');
 		Throwback
 			.jQuery(el)
-			.css({ width : '100%', height : '100%' })
+			.addClass('stage')
 			.appendTo(container || 'body');
 		return el;
 	};

@@ -1,0 +1,13 @@
+/**
+ * throwback v0.0.1 - 2013-06-09
+ * Retro Game Rendering Engine
+ *
+ * Copyright (c) 2013 Stephen Young <steve@rockgolem.com>
+ * Licensed MIT
+ */
+html, body { height:100%;}
+
+.stage {
+	width:100%;
+	height:100%;
+}

@@ -21,22 +21,27 @@ module.exports = function(grunt) {
             ' */\n'
         ].join(''),
 
-        sources : [
-            'src/chrome/intro.js',
-            'src/throwback.js',
-            'src/base.js',
-            'src/bootstrap.js',
-            'src/timer.js',
-            'src/game.js',
-            'src/node.js',
-            'src/nodes/*',
-            'src/animation.js',
-            'src/sprite.js',
-            'src/audio.js',
-            'src/audio/*',
-            'src/chrome/export.js',
-            'src/chrome/outro.js'
-        ],
+        sources : {
+            js : [
+                'src/chrome/intro.js',
+                'src/throwback.js',
+                'src/base.js',
+                'src/bootstrap.js',
+                'src/timer.js',
+                'src/game.js',
+                'src/node.js',
+                'src/nodes/*',
+                'src/animation.js',
+                'src/sprite.js',
+                'src/audio.js',
+                'src/audio/*',
+                'src/chrome/export.js',
+                'src/chrome/outro.js'
+            ],
+            css : [
+                'src/css/*'
+            ]
+        },
         pkg : pkg,
         uglifyFiles : {}
     };
@@ -44,6 +49,7 @@ module.exports = function(grunt) {
     // setup dynamic filenames
     config.versioned = [config.pkg.name, config.pkg.version].join('-');
     config.dist = ['dist/', '.js'].join(config.versioned);
+    config.distCss = 'dist/css/throwback.css';
     config.example = ['examples/js/', '-latest.js'].join(config.pkg.name);
     config.uglifyFiles[['dist/', '.min.js'].join(config.versioned)] = config.dist;
 
@@ -61,15 +67,20 @@ module.exports = function(grunt) {
                 stripBanners : true,
                 banner : config.banner
             },
-            dist : {
-                src : config.sources,
+            js : {
+                src : config.sources.js,
                 dest : config.dist
+            },
+            css : {
+                src : config.sources.css,
+                dest : config.distCss
             }
         },
         copy : {
             example : {
                 files : [
-                    { 'examples/js/throwback-latest.js' : config.dist }
+                    { 'examples/js/throwback-latest.js' : config.dist },
+                    { 'examples/css/throwback.css' : config.distCss }
                 ]
             }
         },
