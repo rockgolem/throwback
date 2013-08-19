@@ -1,5 +1,5 @@
 	/* globals Throwback, Base */
-
+	var setup;
 	/**
 	 * Game object is the primary constructor
 	 *
@@ -12,5 +12,9 @@
 		constructor : function(config){
 			var options = Throwback.jQuery.extend({}, config);
 			this.stage = options.stage || new Throwback.Stage();
+		},
+
+		setup : function(fn){
+			setup = fn;
 		}
 	});

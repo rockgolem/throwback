@@ -34,5 +34,6 @@
 	makeImage = function(filename){
 		var img = new Image();
 		img.src = filename;
+		img.onLoad = function(){};
 		return img;
 	};
