@@ -1,5 +1,5 @@
 /**
- * throwback v0.0.1 - 2013-06-09
+ * throwback v0.0.1 - 2013-09-10
  * Retro Game Rendering Engine
  *
  * Copyright (c) 2013 Stephen Young <steve@rockgolem.com>
@@ -64,7 +64,8 @@ var Throwback = {};
 		constructor : function(){}
 	});
 var Timer = Throwback.Timer = Base.extend();
-/**
+var setup;
+	/**
 	 * Game object is the primary constructor
 	 *
 	 * It creates a stage and maintains the game loop
@@ -76,6 +77,10 @@ var Timer = Throwback.Timer = Base.extend();
 		constructor : function(config){
 			var options = Throwback.jQuery.extend({}, config);
 			this.stage = options.stage || new Throwback.Stage();
+		},
+
+		setup : function(fn){
+			setup = fn;
 		}
 	});
 var Node = Throwback.Node = Base.extend();
@@ -145,6 +150,7 @@ var imageCache, makeImage;
 	makeImage = function(filename){
 		var img = new Image();
 		img.src = filename;
+		img.onLoad = function(){};
 		return img;
 	};
 var Audio = Throwback.Audio = Base.extend();
