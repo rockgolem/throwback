@@ -114,7 +114,38 @@ var generateStage;
 			.appendTo(container || 'body');
 		return el;
 	};
-var Animation = Throwback.Animation = Base.extend();
+var Animation = Throwback.Animation = Base.extend({
+
+		/**
+		 * Wraps a sprite
+		 *
+		 * @param Throwback.Sprite sprite
+		 * @return void
+		 */
+		constructor : function(sprite){
+			this.sprite = sprite;
+		},
+
+		/**
+		 * Returns the frame count of the animation
+		 *
+		 * @return Number
+		 */
+		getFrameCount : function(){
+			var frames = this.frames;
+			return frames ? frames.length : this.sprite.getFrameCount();
+		},
+
+		/**
+		 * Limits the animation to certain frames
+		 *
+		 * @param Array frames
+		 * @return void
+		 */
+		sequence : function(frames){
+			this.frames = frames;
+		}
+	});
 var imageCache, makeImage;
 
 	imageCache = {};
@@ -155,6 +186,17 @@ var imageCache, makeImage;
 		 */
 		get : function(key){
 			return this.options[key];
+		},
+
+		getFrameCount : function(){
+			var width, height, frameWidth, frameHeight;
+
+			width = this.get('width') || 0;
+			height = this.get('height') || 0;
+			frameWidth = this.get('frameWidth') || 1;
+			frameHeight = this.get('frameHeight') || 1;
+
+			return Math.floor(width / frameWidth) * Math.floor(height / frameHeight);
 		},
 
 		/**

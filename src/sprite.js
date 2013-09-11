@@ -41,6 +41,17 @@
 			return this.options[key];
 		},
 
+		getFrameCount : function(){
+			var width, height, frameWidth, frameHeight;
+
+			width = this.get('width') || 0;
+			height = this.get('height') || 0;
+			frameWidth = this.get('frameWidth') || 1;
+			frameHeight = this.get('frameHeight') || 1;
+
+			return Math.floor(width / frameWidth) * Math.floor(height / frameHeight);
+		},
+
 		/**
 		 * @param String filename
 		 * @return void
