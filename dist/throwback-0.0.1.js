@@ -1,5 +1,5 @@
 /**
- * throwback v0.0.1 - 2013-09-10
+ * throwback v0.0.1 - 2013-09-11
  * Retro Game Rendering Engine
  *
  * Copyright (c) 2013 Stephen Young <steve@rockgolem.com>
@@ -123,7 +123,11 @@ var Animation = Throwback.Animation = Base.extend({
 		 * @return void
 		 */
 		constructor : function(sprite){
+			var anim = this;
 			this.sprite = sprite;
+			sprite.async.done(function(){
+				anim.sequence([0]);
+			});
 		},
 
 		/**
@@ -143,10 +147,14 @@ var Animation = Throwback.Animation = Base.extend({
 		 * @return void
 		 */
 		sequence : function(frames){
-			this.frames = frames;
+			if (this.sprite.verifyFrames(frames)){
+				this.frames = frames;
+			} else {
+				throw new Error('frames out of bounds');
+			}
 		}
 	});
-var imageCache, makeImage;
+var imageCache, makeImage, guessSize;
 
 	imageCache = {};
 
@@ -160,6 +168,7 @@ var imageCache, makeImage;
 		 * @return void
 		 */
 		constructor : function(param){
+			this.async = new Throwback.jQuery.Deferred();
 			this.options = {};
 			if (typeof param === 'string') {
 				this.setImage(param);
@@ -170,6 +179,8 @@ var imageCache, makeImage;
 
 		/**
 		 * Store configuration data about the Sprite
+		 *
+		 * @param Object options
 		 * @return void
 		 */
 		config : function(options){
@@ -204,20 +215,64 @@ var imageCache, makeImage;
 		 * @return void
 		 */
 		setImage : function(filename){
-			this.image = imageCache[filename] || (imageCache[filename] = makeImage(filename));
+			var image;
+
+			image = imageCache[filename];
+			if (image){
+				this.image = image;
+				this.async.resolve();
+			} else {
+				this.image = (imageCache[filename] = makeImage(filename, this.async));
+			}
+			guessSize.call(this);
+		},
+
+		verifyFrames : function(frames){
+			var min, max;
+			min = Math.min.apply(Math, frames);
+			max = Math.max.apply(Math, frames);
+			return min >= 0 && max <= this.getFrameCount() - 1;
 		}
 	});
+
+	/**
+	 * Attempts to set the width/height, if they have not already been set.
+	 *
+	 * @return void
+	 */
+	guessSize = function(){
+		var sprite = this,
+			image = this.image;
+
+		if (image){
+			this.async.done(function(){
+				var el, width, height;
+
+				el = Throwback.jQuery(image);
+				width = sprite.get('width') || el.width();
+				height = sprite.get('height') || el.height();
+				sprite.config({
+					width : width,
+					height : height,
+					frameWidth : sprite.get('frameWidth') || width || 1,
+					frameHeight : sprite.get('frameHeight') || height || 1
+				});
+			});
+		}
+	};
 
 	/**
 	 * Creates a new image object, and sets the src to filename.
 	 *
 	 * @param String filename
+	 * @param jQuery.Defered async
 	 * @return Image
 	 */
-	makeImage = function(filename){
+	makeImage = function(filename, async){
 		var img = new Image();
 		img.src = filename;
-		img.onLoad = function(){};
+		// TODO: Fix error state.  onError isn't right.  Tests failing
+		img.onLoad = img.onError = function(){ async.resolve(); };
 		return img;
 	};
 var Audio = Throwback.Audio = Base.extend();

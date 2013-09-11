@@ -8,7 +8,11 @@
 		 * @return void
 		 */
 		constructor : function(sprite){
+			var anim = this;
 			this.sprite = sprite;
+			sprite.async.done(function(){
+				anim.sequence([0]);
+			});
 		},
 
 		/**
@@ -28,6 +32,10 @@
 		 * @return void
 		 */
 		sequence : function(frames){
-			this.frames = frames;
+			if (this.sprite.verifyFrames(frames)){
+				this.frames = frames;
+			} else {
+				throw new Error('frames out of bounds');
+			}
 		}
 	});
