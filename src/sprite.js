@@ -9,16 +9,41 @@
 	var Sprite = Throwback.Sprite = Base.extend({
 
 		/**
-		 * @param String filename
+		 * @param String|Object param
 		 * @return void
 		 */
-		constructor : function(filename){
-			this.setImage(filename);
+		constructor : function(param){
+			this.options = {};
+			if (typeof param === 'string') {
+				this.setImage(param);
+			} else {
+				this.config(param);
+			}
 		},
 
 		/**
-		 * @param {[type]} filename [description]
-		 * @return {[type]}
+		 * Store configuration data about the Sprite
+		 * @return void
+		 */
+		config : function(options){
+			Throwback.jQuery.extend(this.options, options);
+			if (options.img){
+				this.setImage(options.img);
+			}
+		},
+
+		/**
+		 * Returns a config option by key
+		 * @param String key
+		 * @return Mixed
+		 */
+		get : function(key){
+			return this.options[key];
+		},
+
+		/**
+		 * @param String filename
+		 * @return void
 		 */
 		setImage : function(filename){
 			this.image = imageCache[filename] || (imageCache[filename] = makeImage(filename));
