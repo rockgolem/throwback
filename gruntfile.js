@@ -96,7 +96,7 @@ module.exports = function(grunt) {
                 options : {
                     specs : 'test/spec/*.spec.js',
                     template : 'test/grunt.tmpl',
-                    vendor : 'lib/jquery.min.js'
+                    vendor : 'vendor/jquery.min.js'
                 }
             }
         },

@@ -1,5 +1,5 @@
 /**
- * throwback v0.0.1 - 2013-09-11
+ * throwback v0.0.1 - 2013-10-24
  * Retro Game Rendering Engine
  *
  * Copyright (c) 2013 Stephen Young <steve@rockgolem.com>
@@ -271,7 +271,6 @@ var imageCache, makeImage, guessSize;
 	makeImage = function(filename, async){
 		var img = new Image();
 		img.src = filename;
-		// TODO: Fix error state.  onError isn't right.  Tests failing
 		img.onLoad = img.onError = function(){ async.resolve(); };
 		return img;
 	};
