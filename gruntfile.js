@@ -71,10 +71,6 @@ module.exports = function(grunt) {
             js : {
                 src : config.sources.js,
                 dest : config.dist
-            },
-            css : {
-                src : config.sources.css,
-                dest : config.distCss
             }
         },
         copy : {
@@ -84,6 +80,17 @@ module.exports = function(grunt) {
                     { 'examples/js/jquery.min.js' : 'vendor/jquery.min.js' },
                     { 'examples/css/throwback.css' : config.distCss }
                 ]
+            }
+        },
+        cssmin : {
+            combine : {
+                options : {
+                    banner : config.banner,
+                    keepSpecialComments : 1
+                },
+                files : {
+                    'dist/css/throwback.css' : config.sources.css
+                }
             }
         },
         uglify : {
@@ -102,6 +109,26 @@ module.exports = function(grunt) {
                 }
             }
         },
+        jsbeautifier : {
+            files : [config.dist],
+            options : {
+                indent_size : 4,
+                indent_char : " ",
+                indent_level : 0,
+                indent_with_tabs : false,
+                preserve_newlines : true,
+                max_preserve_newlines : 10,
+                jslint_happy : true,
+                brace_style : 'collapse',
+                keep_array_indentation : false,
+                keep_function_indentation : false,
+                space_before_conditional : true,
+                break_chained_methods : false,
+                eval_code : false,
+                wrap_line_length : 0,
+                unescape_strings : false
+            }
+        },
         jshint : {
             options : {
                 jshintrc : 'jshint.json'
@@ -116,7 +143,13 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-contrib-cssmin');
+
+    // non-contrib npm tasks
+    grunt.loadNpmTasks('grunt-jsbeautifier');
 
     // Default task.
-    grunt.registerTask('default', ['clean', 'concat', 'jshint', 'copy', 'uglify', 'jasmine']);
+    grunt.registerTask('default', [
+        'clean', 'concat', 'jshint', 'copy', 'jsbeautifier', 'uglify', 'cssmin', 'jasmine'
+    ]);
 };
