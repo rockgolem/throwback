@@ -80,6 +80,7 @@ module.exports = function(grunt) {
             example : {
                 files : [
                     { 'examples/js/throwback-latest.js' : config.dist },
+                    { 'examples/js/jquery.min.js' : 'vendor/jquery.min.js' },
                     { 'examples/css/throwback.css' : config.distCss }
                 ]
             }
