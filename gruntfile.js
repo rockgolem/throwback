@@ -39,7 +39,8 @@ module.exports = function(grunt) {
                 'src/chrome/outro.js'
             ],
             css : [
-                'src/css/*'
+                'src/css/normalize.css',
+                'src/css/base.css'
             ]
         },
         pkg : pkg,
