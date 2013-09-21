@@ -150,6 +150,6 @@ module.exports = function(grunt) {
 
     // Default task.
     grunt.registerTask('default', [
-        'clean', 'concat', 'jshint', 'copy', 'jsbeautifier', 'uglify', 'cssmin', 'jasmine'
+        'clean', 'concat', 'jshint', 'jsbeautifier', 'uglify', 'cssmin', 'copy', 'jasmine'
     ]);
 };
