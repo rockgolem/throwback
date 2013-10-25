@@ -24,7 +24,7 @@
 			this.position = [0, 0, 1];
 			Throwback.jQuery(el).css({ position:'absolute', top : 0, left : 0 });
 		},
-		setPosition : function(x, y){
+		move : function(x, y){
 			this.position = numeric.dot(translationMatrix(x, y), this.position);
 		}
 	});

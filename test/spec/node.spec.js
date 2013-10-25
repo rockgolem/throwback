@@ -23,17 +23,21 @@ describe('Node', function(){
 		expect(node.el).toEqual(jasmine.any(HTMLElement));
 	});
 
-	it('can set the coordinates of the div', function(){
+	it('can move relative to current position ', function(){
 		var node = new Throwback.Node();
 		var stage = new Throwback.Stage();
 		var position;
 
 		stage.attach(node);
 
-		node.setPosition(10, 20);
-
+		node.move(10, 20);
 		position = node.position;
 		expect(position[0]).toBe(10);
 		expect(position[1]).toBe(20);
+
+		node.move(-3, 8);
+		position = node.position;
+		expect(position[0]).toBe(7);
+		expect(position[1]).toBe(28);
 	});
 });
