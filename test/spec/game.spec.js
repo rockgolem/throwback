@@ -23,4 +23,14 @@ describe('Game', function(){
 		game.start();
 		expect(worked).toBe(true);
 	});
+
+	it('allows you to define an update method that gets callled every frame', function(){
+		var game = new Throwback.Game();
+		var worked = false;
+		game.tick(function(){
+			worked = true;
+		});
+		game.start();
+		expect(worked).toBe(true);
+	});
 });

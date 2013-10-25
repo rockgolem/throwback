@@ -1,5 +1,11 @@
-	/* globals Throwback, Base */
-	var setup;
+	/* globals Throwback, Base, requestAnimationFrame */
+	var _gameSetup, _logicUpdate, _mainLoop, _previousTime, _lag;
+
+	var MS_PER_UPDATE = 1 / 60;
+
+
+	_gameSetup = _logicUpdate = function(){};
+
 	/**
 	 * Game object is the primary constructor
 	 *
@@ -15,10 +21,42 @@
 		},
 
 		setup : function(fn){
-			setup = fn;
+			_gameSetup = fn;
 		},
 
 		start : function(){
-			setup();
-		}
+			_gameSetup();
+			_mainLoop();
+		},
+
+		tick : function(fn){
+			_logicUpdate = fn;
+		},
 	});
+
+	_previousTime = (new Date()).getTime();
+	_lag = 0.0;
+
+	/**
+	 * Main logic / render loop.
+	 *
+	 * @return void
+	 */
+	_mainLoop = function(){
+		var now;
+
+		now = (new Date()).getTime();
+		_lag += now - _previousTime;
+		_previousTime = now;
+
+		// TODO: process user input here
+
+		while(_lag >= MS_PER_UPDATE) {
+			_logicUpdate();
+			_lag -= MS_PER_UPDATE;
+		}
+
+		// TODO: Render (pass in _lag / MS_PER_UPDATE)
+
+		requestAnimationFrame(_mainLoop);
+	};
