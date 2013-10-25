@@ -13,4 +13,14 @@ describe('Game', function(){
 			expect(game.stage).toEqual(jasmine.any(CustomStage));
 		});
 	});
+
+	it('has a setup function that is called when the game is initialized', function(){
+		var game = new Throwback.Game();
+		var worked = false;
+		game.setup(function(){
+			worked = true;
+		});
+		game.start();
+		expect(worked).toBe(true);
+	});
 });

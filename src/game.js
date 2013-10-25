@@ -16,5 +16,9 @@
 
 		setup : function(fn){
 			setup = fn;
+		},
+
+		start : function(){
+			setup();
 		}
 	});

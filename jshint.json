@@ -12,6 +12,7 @@
     "browser" : true,
     "globals" : {
         "module" : true,
-        "exports" : true
+        "exports" : true,
+        "numeric" : true
     }
 }
