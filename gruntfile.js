@@ -69,16 +69,23 @@ module.exports = function(grunt) {
                 stripBanners : true,
                 banner : config.banner
             },
-            js : {
+            src : {
                 src : config.sources.js,
                 dest : config.dist
             },
             vendor : {
-                src : [config.dist, 'vendor/numeric.js'],
+                src : [
+                    'vendor/requestAnimationFrame.js',
+                    config.dist,
+                    'vendor/numeric.js'
+                ],
                 dest : config.dist
             },
             vendorMin : {
-                src : [config.minifiedName, 'vendor/numeric.min.js'],
+                src : [
+                    config.minifiedName,
+                    'vendor/numeric.min.js'
+                ],
                 dest : config.minifiedName
             }
         },
@@ -114,7 +121,10 @@ module.exports = function(grunt) {
                 options : {
                     specs : 'test/spec/*.spec.js',
                     template : 'test/grunt.tmpl',
-                    vendor : 'vendor/jquery.min.js'
+                    vendor : [
+                        'vendor/jquery.min.js',
+                        'http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.2/underscore-min.js'
+                    ]
                 }
             }
         },
@@ -159,9 +169,8 @@ module.exports = function(grunt) {
 
     // Default task.
     grunt.registerTask('default', [
-        'clean', 'concat:js', 'jshint',
-        'jsbeautifier', 'uglify', 'concat:vendor',
-        'concat:vendorMin', 'cssmin', 'copy',
-        'jasmine'
+        'clean', 'concat:src', 'jshint', 'concat:vendor',
+        'uglify', 'jsbeautifier', 'concat:vendorMin',
+        'cssmin', 'copy', 'jasmine'
     ]);
 };

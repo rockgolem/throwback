@@ -4136,7 +4136,7 @@ numeric.svd= function svd(A) {
     var temp;
 //Compute the thin SVD from G. H. Golub and C. Reinsch, Numer. Math. 14, 403-420 (1970)
 	var prec= numeric.epsilon; //Math.pow(2,-52) // assumes double prec
-	var tolerance= 1.e-64/prec;
+	var tolerance= 1e-64/prec;
 	var itmax= 50;
 	var c=0;
 	var i=0;

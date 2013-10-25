@@ -3,7 +3,6 @@
     <head>
         <meta charset="utf-8">
         <title>Jasmine Spec Runner</title>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.2/underscore-min.js"></script>
         <% with (scripts) { %>
             <% [].concat(jasmine, vendor, helpers, src, specs, reporters, start).forEach(function(script){ %>
                 <script src="<%= script %>"></script>
