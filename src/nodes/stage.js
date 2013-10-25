@@ -6,6 +6,11 @@
 	 */
 	var Stage = Throwback.Stage = Node.extend({
 
+		addChild : function(node){
+			Node.prototype.addChild.call(this, node);
+			this.attach(node);
+		},
+
 		// Make a node append to the stage element
 		attach : function(node){
 			var children, stage;

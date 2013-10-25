@@ -17,6 +17,16 @@ describe('Stage', function(){
 		expect(stage.el.hasChildNodes()).toBe(true);
 	});
 
+	it('automatically attaches any stage children', function(){
+		var stage = new Throwback.Stage();
+
+		expect(stage.el.hasChildNodes()).toBe(false);
+		stage.addChild(new Throwback.Node());
+
+		expect(stage.el.hasChildNodes()).toBe(true);
+
+	});
+
 	it('adds all child nodes to the DOM too', function(){
 		var stage = new Throwback.Stage();
 		var parent = new Throwback.Node();
