@@ -31,13 +31,14 @@ describe('Node', function(){
 		stage.attach(node);
 
 		node.move(10, 20);
-		position = node.position;
+		position = node.updatePosition();
 		expect(position[0]).toBe(10);
 		expect(position[1]).toBe(20);
 
+		node.move(-2, -1);
 		node.move(-3, 8);
-		position = node.position;
-		expect(position[0]).toBe(7);
-		expect(position[1]).toBe(28);
+		position = node.updatePosition();
+		expect(position[0]).toBe(5);
+		expect(position[1]).toBe(27);
 	});
 });

@@ -24,8 +24,29 @@
 			this.position = [0, 0, 1];
 			Throwback.jQuery(el).css({ position:'absolute', top : 0, left : 0 });
 		},
+
+		/**
+		 * Updates the internal matrix, but does not apply it to the position vector.
+		 *
+		 * @param Number x units of movement relative to the current position
+		 * @param Number y units of movement relative to the current position
+		 * @return Array
+		 */
 		move : function(x, y){
-			this.position = numeric.dot(translationMatrix(x, y), this.position);
+			return this.matrix = numeric.dot(this.matrix, translationMatrix(x, y));
+		},
+
+		/**
+		 * Applies the internal matrix to the position vector
+		 *
+		 * @param void
+		 * @return Array
+		 */
+		updatePosition : function(){
+			var position = this.position = numeric.dot(this.matrix, this.position);
+
+			this.matrix = identityMatrix();
+			return position;
 		}
 	});
 
