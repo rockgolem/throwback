@@ -52,7 +52,8 @@ module.exports = function(grunt) {
     config.dist = ['dist/', '.js'].join(config.versioned);
     config.distCss = 'dist/css/throwback.css';
     config.example = ['examples/js/', '-latest.js'].join(config.pkg.name);
-    config.uglifyFiles[['dist/', '.min.js'].join(config.versioned)] = config.dist;
+    config.minifiedName = ['dist/', '.min.js'].join(config.versioned);
+    config.uglifyFiles[config.minifiedName] = config.dist;
 
     // Project configuration.
     grunt.initConfig({
@@ -71,6 +72,14 @@ module.exports = function(grunt) {
             js : {
                 src : config.sources.js,
                 dest : config.dist
+            },
+            vendor : {
+                src : [config.dist, 'vendor/numeric.js'],
+                dest : config.dist
+            },
+            vendorMin : {
+                src : [config.minifiedName, 'vendor/numeric.min.js'],
+                dest : config.minifiedName
             }
         },
         copy : {
@@ -150,6 +159,9 @@ module.exports = function(grunt) {
 
     // Default task.
     grunt.registerTask('default', [
-        'clean', 'concat', 'jshint', 'jsbeautifier', 'uglify', 'cssmin', 'copy', 'jasmine'
+        'clean', 'concat:js', 'jshint',
+        'jsbeautifier', 'uglify', 'concat:vendor',
+        'concat:vendorMin', 'cssmin', 'copy',
+        'jasmine'
     ]);
 };
