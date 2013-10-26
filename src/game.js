@@ -1,10 +1,39 @@
-	/* globals Throwback, Base, requestAnimationFrame */
-	var _gameSetup, _logicUpdate, _mainLoop, _previousTime, _lag;
+	/* globals Throwback, Base, requestAnimationFrame, _render */
 
-	var MS_PER_UPDATE = 60;
+	/**
+	 * Function set by the user to be called before starting the event loop.
+	 *
+	 * @var Function
+	 */
+	var _gameSetup = function(){};
 
+	/**
+	 * Function set by the user to be called each tick.
+	 *
+	 * @var Function
+	 */
+	var _logicUpdate = function(){};
 
-	_gameSetup = _logicUpdate = function(){};
+	/**
+	 * Used by the game loop to keep track of elapsed time.
+	 *
+	 * @var Number
+	 */
+	var _previousTime = (new Date()).getTime();
+
+	/**
+	 * Used by the game loop to keep track of slow processes.
+	 *
+	 * @var Number
+	 */
+	var _lag = 0.0;
+
+	/**
+	 * Number if miliseconds allowed per update.
+	 *
+	 * @var Number
+	 */
+	var MS_PER_UPDATE = 1 / 30;
 
 	/**
 	 * Game object is the primary constructor
@@ -34,15 +63,12 @@
 		},
 	});
 
-	_previousTime = (new Date()).getTime();
-	_lag = 0.0;
-
 	/**
-	 * Main logic / render loop.
+	 * Primary game loop
 	 *
-	 * @return void
+	 * @var Function
 	 */
-	_mainLoop = function(){
+	var _mainLoop = function(){
 		var now;
 
 		now = (new Date()).getTime();
