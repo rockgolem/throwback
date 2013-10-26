@@ -1,5 +1,12 @@
 	/* globals Throwback, Scene, Node:true */
-	var attachStage;
+	var attachStage, _stagedNodes;
+
+	/**
+	 * List of nodes used by the render loop to draw.
+	 *
+	 * @type Array
+	 */
+	_stagedNodes = [];
 
 	/**
 	 * The stage object keeps track of layers and represents the base element.
@@ -26,6 +33,7 @@
 						stage.attach(node);
 					});
 				}
+				_stagedNodes.push(node);
 			}
 		},
 		constructor : function(config){

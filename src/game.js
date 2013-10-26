@@ -1,7 +1,7 @@
 	/* globals Throwback, Base, requestAnimationFrame */
 	var _gameSetup, _logicUpdate, _mainLoop, _previousTime, _lag;
 
-	var MS_PER_UPDATE = 1 / 60;
+	var MS_PER_UPDATE = 60;
 
 
 	_gameSetup = _logicUpdate = function(){};
@@ -56,7 +56,7 @@
 			_lag -= MS_PER_UPDATE;
 		}
 
-		// TODO: Render (pass in _lag / MS_PER_UPDATE)
+		_render(_lag / MS_PER_UPDATE);
 
 		requestAnimationFrame(_mainLoop);
 	};
