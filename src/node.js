@@ -41,7 +41,11 @@
 		 * @return void
 		 */
 		rotate : function(degree){
-			return this.matrix = numeric.dot(this.matrix, rotationMatrix(degree));
+			var current = this.matrix[3];
+
+			this.move(-current[0], -current[1], -current[2]);
+			this.matrix = numeric.dot(this.matrix, rotationMatrix(degree));
+			return this.move.apply(this, current);
 		},
 
 		/**
