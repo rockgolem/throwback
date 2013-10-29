@@ -22,23 +22,4 @@ describe('Node', function(){
 		var node = new Throwback.Node();
 		expect(node.el).toEqual(jasmine.any(HTMLElement));
 	});
-
-	it('can move relative to current position ', function(){
-		var node = new Throwback.Node();
-		var stage = new Throwback.Stage();
-		var position;
-
-		stage.attach(node);
-
-		node.move(10, 20);
-		position = node.updatePosition();
-		expect(position[0]).toBe(10);
-		expect(position[1]).toBe(20);
-
-		node.move(-2, -1);
-		node.move(-3, 8);
-		position = node.updatePosition();
-		expect(position[0]).toBe(5);
-		expect(position[1]).toBe(27);
-	});
 });

@@ -1,4 +1,4 @@
-/* globals describe, it, expect, jasmine, Throwback */
+/* globals describe, it, expect, jasmine, Throwback, runs, waits */
 describe('Game', function(){
 	describe('constructor', function(){
 		it('generates a new stage object', function(){
@@ -27,10 +27,17 @@ describe('Game', function(){
 	it('allows you to define an update method that gets callled every frame', function(){
 		var game = new Throwback.Game();
 		var worked = false;
+
 		game.tick(function(){
 			worked = true;
 		});
-		game.start();
-		expect(worked).toBe(true);
+
+		runs(function(){
+			game.start();
+		});
+		waits(100);
+		runs(function(){
+			expect(worked).toBe(true);
+		});
 	});
 });
