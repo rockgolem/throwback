@@ -1,7 +1,5 @@
 	/* globals Throwback, Base, Node:true, numeric */
 
-	var translationMatrix, identityMatrix;
-
 	var Node = Throwback.Node = Base.extend({
 		addChild : function(node){
 			var stage;
@@ -21,47 +19,77 @@
 			this.parent = null;
 			this.children = [];
 			this.matrix = identityMatrix();
-			this.position = [0, 0, 1];
+			this.position = [0, 0, 0, 1];
 			Throwback.jQuery(el).css({ position:'absolute', top : 0, left : 0 });
 		},
 
 		/**
-		 * Updates the internal matrix, but does not apply it to the position vector.
+		 * Move (translate) the node
 		 *
 		 * @param Number x units of movement relative to the current position
 		 * @param Number y units of movement relative to the current position
 		 * @return Array
 		 */
-		move : function(x, y){
-			return this.matrix = numeric.dot(this.matrix, translationMatrix(x, y));
+		move : function(x, y, z){
+			return this.matrix = numeric.dot(this.matrix, translationMatrix(x, y, z));
 		},
 
 		/**
-		 * Applies the internal matrix to the position vector
+		 * Rotate the node
 		 *
-		 * @param void
-		 * @return Array
+		 * @param Number s
+		 * @return void
 		 */
-		updatePosition : function(){
-			var position = this.position = numeric.dot(this.matrix, this.position);
+		rotate : function(degree){
+			return this.matrix = numeric.dot(this.matrix, rotationMatrix(degree));
+		},
 
-			this.matrix = identityMatrix();
-			return position;
+		/**
+		 * Scales the node up or down
+		 *
+		 * @param Number s
+		 * @return void
+		 */
+		scale : function(s){
+			return this.matrix = numeric.dot(this.matrix, scaleMatrix(s));
 		}
 	});
 
-	identityMatrix = function(){
+	var identityMatrix = function(){
 		return [
-			[1,0,0],
-			[0,1,0],
-			[0,0,1]
+			[1,0,0,0],
+			[0,1,0,0],
+			[0,0,1,0],
+			[0,0,0,1]
 		];
 	};
 
-	translationMatrix = function(x, y){
+	var rotationMatrix = function(degree){
+		var cos = Math.cos;
+		var sin = Math.sin;
 		return [
-			[1,0,x],
-			[0,1,y],
-			[0,0,1]
+			[cos(degree),sin(-degree),0,0],
+			[sin(degree),cos(degree),0,0],
+			[0,0,1,0],
+			[0,0,0,1]
+		];
+	};
+
+	var scaleMatrix = function(s){
+		return [
+			[s,0,0,0],
+			[0,s,0,0],
+			[0,0,s,0],
+			[0,0,0,1]
+		];
+	};
+
+	var translationMatrix = function(x, y, z){
+		z = z || 0;
+		return [
+			[1,0,0,0],
+			[0,1,0,0],
+			[0,0,1,0],
+			[x,y,z,1]
 		];
 	};

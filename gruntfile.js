@@ -28,6 +28,7 @@ module.exports = function(grunt) {
                 'src/base.js',
                 'src/bootstrap.js',
                 'src/timer.js',
+                'src/render.js',
                 'src/game.js',
                 'src/node.js',
                 'src/nodes/*',

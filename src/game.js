@@ -33,7 +33,7 @@
 	 *
 	 * @var Number
 	 */
-	var MS_PER_UPDATE = 1 / 30;
+	var MS_PER_UPDATE = 60;
 
 	/**
 	 * Game object is the primary constructor
