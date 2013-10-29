@@ -10,9 +10,24 @@ describe('Entity', function(){
 	var animation = new Throwback.Animation(sprite);
 	animation.sequence([1, 2, 3, 4]);
 
-	it('can wrap an animation object', function(){
-		var entity = new Throwback.Entity({ animation : animation });
+	it('can have animation objects', function(){
+		var entity = new Throwback.Entity({
+			animations : {
+				walking : animation
+			}
+		});
 
-		expect(entity.animation).toEqual(jasmine.any(Throwback.Animation));
+		expect(entity.animations.walking).toEqual(jasmine.any(Throwback.Animation));
+	});
+
+	it('sets a default animation, and a current animation', function(){
+		var entity = new Throwback.Entity({
+			animations : {
+				walking : animation
+			},
+			defaultAnimation : 'walking'
+		});
+
+		expect(entity.currentAnimation).toBe(animation);
 	});
 });

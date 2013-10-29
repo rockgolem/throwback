@@ -82,7 +82,7 @@
 			_lag -= MS_PER_UPDATE;
 		}
 
-		_render(_lag / MS_PER_UPDATE);
+		_render(_lag / MS_PER_UPDATE, now);
 
 		requestAnimationFrame(_mainLoop);
 	};

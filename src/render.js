@@ -1,7 +1,7 @@
 /* globals _stagedNodes */
-var _render = function(delta){
+var _render = function(delta, now){
 	var length = _stagedNodes.length;
-	var i, k, position, transform, node, style, matrix;
+	var i, transform, node, style, matrix;
 
 	for(i = 0; i < length; i++){
 		node = _stagedNodes[i];
@@ -20,5 +20,10 @@ var _render = function(delta){
 		style = node.el.style;
 		style["-webkit-transform"] = transform;
 		style.transform = transform;
+
+		// process animations
+		if (node.animate){
+			node.animate(now);
+		}
 	}
 };
