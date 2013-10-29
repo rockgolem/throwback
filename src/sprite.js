@@ -76,7 +76,7 @@
 			var min, max;
 			min = Math.min.apply(Math, frames);
 			max = Math.max.apply(Math, frames);
-			return min >= 0 && max <= this.getFrameCount() - 1;
+			return min >= 0 && max <= Math.max(0, this.getFrameCount() - 1);
 		}
 	});
 

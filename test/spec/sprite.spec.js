@@ -41,5 +41,8 @@ describe('Sprite', function(){
 		});
 		expect(sprite.verifyFrames([0, 1, 2])).toBe(true);
 		expect(sprite.verifyFrames([48, 49, 50])).toBe(false);
+
+		sprite = new Throwback.Sprite('someImage.jpg');
+		expect(sprite.verifyFrames([0])).toBe(true);
 	});
 });
