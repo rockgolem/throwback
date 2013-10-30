@@ -109,7 +109,7 @@ describe('Animation', function(){
 		expect(anim.currentFrame).toBe(0);
 	});
 
-	it('producces a background ul for CSS when converted to a string', function(){
+	it('producces a background-position for CSS when converted to a string', function(){
 		var sprite = new Throwback.Sprite({
 			img : 'someImage.jpg',
 			width : 200,
@@ -121,14 +121,29 @@ describe('Animation', function(){
 
 		anim.sequence([4, 9, 10, 15]);
 
-		expect(anim.toString()).toMatch(/url\(".+someImage.jpg"\)\s\-80px\s0px/);
+		expect(anim.toString()).toMatch(/\-80px\s0px/);
 		anim.step();
-		expect(anim.toString()).toMatch(/url\(".+someImage.jpg"\)\s\-180px\s0px/);
+		expect(anim.toString()).toMatch(/\-180px\s0px/);
 		anim.step();
-		expect(anim.toString()).toMatch(/url\(".+someImage.jpg"\)\s0px\s\-20px/);
+		expect(anim.toString()).toMatch(/0px\s\-20px/);
 		anim.step();
-		expect(anim.toString()).toMatch(/url\(".+someImage.jpg"\)\s\-100px\s\-20px/);
+		expect(anim.toString()).toMatch(/\-100px\s\-20px/);
 		anim.step();
-		expect(anim.toString()).toMatch(/url\(".+someImage.jpg"\)\s\-80px\s0px/);
+		expect(anim.toString()).toMatch(/\-80px\s0px/);
+	});
+
+	it('producces a backgroundImage url for CSS', function(){
+		var sprite = new Throwback.Sprite({
+			img : 'someImage.jpg',
+			width : 200,
+			height : 100,
+			frameWidth : 20,
+			frameHeight : 20
+		});
+		var anim = new Throwback.Animation(sprite);
+
+		anim.sequence([4, 9, 10, 15]);
+
+		expect(anim.getBackgroundImage()).toMatch(/url\(".+someImage.jpg"\)/);
 	});
 });

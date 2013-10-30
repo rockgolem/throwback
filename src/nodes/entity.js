@@ -10,8 +10,10 @@
 		animate : function(now){
 			var animation = this.currentAnimation;
 			if (animation && animation.on){
-				animation.update(now);
-				this.render();
+				if(animation.update(now)) {
+					this.render();
+					animation.dirty = false;
+				}
 			}
 		},
 
@@ -30,7 +32,9 @@
 		 * @return void
 		 */
 		render : function(){
-			var background = this.currentAnimation.toString();
+			this.css({
+				backgroundPosition : this.currentAnimation.toString()
+			});
 		},
 
 		/**
@@ -47,6 +51,7 @@
 			this.currentAnimation = current = this.animations[name || this.defaultAnimation];
 			if (current){
 				current.start();
+				this.css({ backgroundImage : current.getBackgroundImage() });
 			}
 		}
 	});

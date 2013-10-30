@@ -1,6 +1,12 @@
 	/* globals Throwback, Base, Node:true, numeric */
 
 	var Node = Throwback.Node = Base.extend({
+
+		/**
+		 * Adds another node as a child
+		 *
+		 * @param Node node
+		 */
 		addChild : function(node){
 			var stage;
 
@@ -13,6 +19,10 @@
 				stage.attach(node);
 			}
 		},
+
+		/**
+		 * @constructor
+		 */
 		constructor : function(){
 			var el;
 			this.el = el = document.createElement('div');
@@ -20,7 +30,18 @@
 			this.children = [];
 			this.matrix = identityMatrix();
 			this.position = [0, 0, 0, 1];
+			this.dirty = false;
 			Throwback.jQuery(el).css({ position:'absolute', top : 0, left : 0 });
+		},
+
+		/**
+		 * jQuery.css proxy
+		 *
+		 * @param Object options
+		 * @return void
+		 */
+		css : function(options){
+			Throwback.jQuery(this.el).css(options);
 		},
 
 		/**

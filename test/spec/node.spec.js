@@ -22,4 +22,16 @@ describe('Node', function(){
 		var node = new Throwback.Node();
 		expect(node.el).toEqual(jasmine.any(HTMLElement));
 	});
+
+	it('proxies jQuery.css', function(){
+		var node = new Throwback.Node();
+
+		node.css({
+			width : 100,
+			height : 75
+		});
+
+		expect(node.el.style.width).toBe('100px');
+		expect(node.el.style.height).toBe('75px');
+	});
 });

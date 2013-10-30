@@ -11,6 +11,7 @@
 			var anim = this;
 			this.sprite = sprite;
 			this.on = false;
+			this.dirty = false;
 			this.currentFrame = 0;
 			sprite.async.done(function(){
 				anim.sequence([0]);
@@ -25,6 +26,14 @@
 		getFrameCount : function(){
 			var frames = this.frames;
 			return frames ? frames.length : this.sprite.getFrameCount();
+		},
+
+		/**
+		 * Return string for backgroundImage
+		 * @return {[type]}
+		 */
+		getBackgroundImage : function(){
+			return 'url("' + this.sprite.image.src + '") ';
 		},
 
 		/**
@@ -62,6 +71,7 @@
 		step : function(){
 			var current = this.currentFrame;
 			this.currentFrame = current === this.frames.length -1 ? 0 : current + 1;
+			this.dirty = true;
 		},
 
 		/**
@@ -70,11 +80,11 @@
 		 * @return void
 		 */
 		stop : function(){
-			this.on = false;
+			this.dirty = this.on = false;
 		},
 
 		/**
-		 * Returns a CSS value for `background`
+		 * Returns a CSS value for `background-position`
 		 *
 		 * @param void
 		 * @return String
@@ -96,7 +106,7 @@
 			}
 			x = -linear;
 			y = -y;
-			return 'url("' + sprite.image.src + '") ' + x.toString() + 'px ' + y.toString() + 'px';
+			return x.toString() + 'px ' + y.toString() + 'px';
 		},
 
 		/**
@@ -109,10 +119,15 @@
 		update : function(now){
 			var interval = now - this.previousFrameTime;
 			var frameTime = this.frameTime;
+			var dirty;
 			while(interval >= frameTime) {
 				this.step();
 				interval -= frameTime;
 			}
-			this.previousFrameTime = now;
+			dirty = this.dirty;
+			if (dirty){
+				this.previousFrameTime = now;
+			}
+			return dirty;
 		}
 	});
