@@ -11,7 +11,6 @@
 			var anim = this;
 			this.sprite = sprite;
 			this.on = false;
-			this.dirty = false;
 			this.currentFrame = 0;
 			sprite.async.done(function(){
 				anim.sequence([0]);
@@ -71,7 +70,6 @@
 		step : function(){
 			var current = this.currentFrame;
 			this.currentFrame = current === this.frames.length -1 ? 0 : current + 1;
-			this.dirty = true;
 		},
 
 		/**
@@ -80,7 +78,7 @@
 		 * @return void
 		 */
 		stop : function(){
-			this.dirty = this.on = false;
+			this.on = false;
 		},
 
 		/**
@@ -119,15 +117,15 @@
 		update : function(now){
 			var interval = now - this.previousFrameTime;
 			var frameTime = this.frameTime;
-			var dirty;
+			var updated = false;
 			while(interval >= frameTime) {
+				updated = true;
 				this.step();
 				interval -= frameTime;
 			}
-			dirty = this.dirty;
-			if (dirty){
+			if (updated){
 				this.previousFrameTime = now;
 			}
-			return dirty;
+			return updated;
 		}
 	});

@@ -2,7 +2,6 @@
 var _render = function(delta, now){
 	var length = _stagedNodes.length;
 	var i, transform, node, style, matrix;
-
 	for(i = 0; i < length; i++){
 		node = _stagedNodes[i];
 

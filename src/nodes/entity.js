@@ -12,7 +12,6 @@
 			if (animation && animation.on){
 				if(animation.update(now)) {
 					this.render();
-					animation.dirty = false;
 				}
 			}
 		},
