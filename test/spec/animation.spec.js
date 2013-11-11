@@ -1,4 +1,4 @@
-/* globals describe, it, expect, jasmine, Throwback, waitsFor, runs */
+/* globals describe, it, expect, jasmine, Throwback, waitsFor, runs, spyOn */
 describe('Animation', function(){
 	it('wraps a sprite', function(){
 		var sprite = new Throwback.Sprite('someImage.jpg');
@@ -146,4 +146,22 @@ describe('Animation', function(){
 
 		expect(anim.getBackgroundImage()).toMatch(/url\(".+someImage.jpg"\)/);
 	});
+	it('will step the frame if update is called after a long enough delay', function(){
+		var sprite = new Throwback.Sprite({
+			img : 'someImage.jpg',
+			width : 200,
+			height : 100,
+			frameWidth : 20,
+			frameHeight : 20
+		});
+		var anim = new Throwback.Animation(sprite);
+
+		anim.sequence([4, 9, 10, 15]);
+		anim.start();
+		spyOn(anim, 'step');
+		anim.update((new Date()).getTime());
+		expect(anim.step).not.toHaveBeenCalled();
+		anim.update((new Date()).getTime() + 100);
+		expect(anim.step).toHaveBeenCalled();
+	 });
 });

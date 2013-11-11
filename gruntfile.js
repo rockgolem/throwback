@@ -121,7 +121,11 @@ module.exports = function(grunt) {
                 src : ['dist/', '.js'].join(config.versioned),
                 options : {
                     specs : 'test/spec/*.spec.js',
-                    template : 'test/grunt.tmpl',
+                    template : require('grunt-template-jasmine-istanbul'),
+                    templateOptions : {
+                        coverage : 'test/reports/coverage.json',
+                        report : 'test/reports/coverage'
+                    },
                     vendor : [
                         'vendor/jquery.min.js',
                         'http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.2/underscore-min.js'

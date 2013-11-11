@@ -34,4 +34,37 @@ describe('Node', function(){
 		expect(node.el.style.width).toBe('100px');
 		expect(node.el.style.height).toBe('75px');
 	});
+
+	it('can be moved', function(){
+		var node = new Throwback.Node();
+		node.move(12, 87);
+		expect(node.matrix).toEqual([
+			[1,0,0,0],
+			[0,1,0,0],
+			[0,0,1,0],
+			[12,87,0,1]
+		]);
+	});
+
+	it('can be rotated', function(){
+		var node = new Throwback.Node();
+		node.rotate(45);
+		expect(node.matrix).toEqual([
+			[0.5253219888177297,-0.8509035245341184,0,0],
+			[0.8509035245341184,0.5253219888177297,0,0],
+			[0,0,1,0],
+			[0,0,0,1]
+		]);
+	});
+
+	it('can be scaled', function(){
+		var node = new Throwback.Node();
+		node.scale(2);
+		expect(node.matrix).toEqual([
+			[2,0,0,0],
+			[0,2,0,0],
+			[0,0,2,0],
+			[0,0,0,1]
+		]);
+	});
 });
