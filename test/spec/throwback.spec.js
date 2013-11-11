@@ -65,7 +65,7 @@ describe('Throwback', function(){
 			runs(function(){
 				tidy = window.requestInterval(function(){
 					litmus++;
-				}, 20);
+				}, 40);
 				expect(litmus).toBe(0);
 			});
 			waitsFor(function(){
@@ -98,5 +98,19 @@ describe('Throwback', function(){
 				expect(litmus).toBe(0);
 			});
 		});
+	});
+	it('falls back on setInterval and setTimeout', function(){
+		var tmp = window.requestAnimationFrame, tidy;
+
+		window.requestAnimationFrame = null;
+		spyOn(window, 'setTimeout');
+		window.requestTimeout(function(){}, 0);
+		expect(window.setTimeout).toHaveBeenCalled();
+
+		spyOn(window, 'setInterval');
+		tidy = window.requestInterval(function(){}, 1);
+		expect(window.setInterval).toHaveBeenCalled();
+		window.clearInterval(tidy);
+		window.requestAnimationFrame = tmp;
 	});
 });

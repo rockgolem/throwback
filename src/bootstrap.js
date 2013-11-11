@@ -6,7 +6,3 @@
 	if (jQuery){
 		Throwback.jQuery = jQuery.noConflict();
 	}
-
-	var Bootstrap = Throwback.Bootstrap = Base.extend({
-		constructor : function(){}
-	});

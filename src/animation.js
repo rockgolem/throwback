@@ -11,6 +11,7 @@
 			var anim = this;
 			this.sprite = sprite;
 			this.on = false;
+			this.frames = [];
 			this.currentFrame = 0;
 			sprite.async.done(function(){
 				anim.sequence([0]);
@@ -23,8 +24,7 @@
 		 * @return Number
 		 */
 		getFrameCount : function(){
-			var frames = this.frames;
-			return frames ? frames.length : this.sprite.getFrameCount();
+			return this.frames.length;
 		},
 
 		/**

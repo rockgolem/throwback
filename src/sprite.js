@@ -1,5 +1,5 @@
 	/* globals Throwback, Base */
-	var imageCache, makeImage, guessSize;
+	var imageCache, makeImage, guessSize, fixFrameSize;
 
 	imageCache = {};
 
@@ -13,7 +13,6 @@
 		 * @return void
 		 */
 		constructor : function(param){
-			this.async = new Throwback.jQuery.Deferred();
 			this.options = {};
 			if (typeof param === 'string') {
 				this.setImage(param);
@@ -33,6 +32,7 @@
 			if (options.img){
 				this.setImage(options.img);
 			}
+			fixFrameSize.call(this);
 		},
 
 		/**
@@ -49,8 +49,8 @@
 
 			width = this.get('width') || 0;
 			height = this.get('height') || 0;
-			frameWidth = this.get('frameWidth') || 1;
-			frameHeight = this.get('frameHeight') || 1;
+			frameWidth = this.get('frameWidth');
+			frameHeight = this.get('frameHeight');
 
 			return Math.floor(width / frameWidth) * Math.floor(height / frameHeight);
 		},
@@ -60,16 +60,22 @@
 		 * @return void
 		 */
 		setImage : function(filename){
-			var image;
+			var image, async;
 
 			image = imageCache[filename];
+			async = this.async = new Throwback.jQuery.Deferred();
+
 			if (image){
 				this.image = image;
-				this.async.resolve();
+				async.resolve();
 			} else {
-				this.image = (imageCache[filename] = makeImage(filename, this.async));
+				this.image = (imageCache[filename] = makeImage(filename, async));
 			}
 			guessSize.call(this);
+
+			async.fail(function(){
+				throw new Error('Could not load image: ' + filename);
+			});
 		},
 
 		verifyFrames : function(frames){
@@ -79,6 +85,17 @@
 			return min >= 0 && max <= Math.max(0, this.getFrameCount() - 1);
 		}
 	});
+
+	fixFrameSize = function(){
+		var options = this.options;
+		['Height', 'Width'].forEach(function(param){
+			var frameName = 'frame' + param;
+			if(options[frameName] === undefined){
+				options[frameName] = options[param.toLowerCase()];
+			}
+			options[frameName] = Math.max(options[frameName], 1);
+		});
+	};
 
 	/**
 	 * Attempts to set the width/height, if they have not already been set.
@@ -114,6 +131,6 @@
 	makeImage = function(filename, async){
 		var img = new Image();
 		img.src = filename;
-		img.onLoad = img.onError = function(){ async.resolve(); };
+		img.onLoad = img.onError = function(){ async.reject(); };
 		return img;
 	};

@@ -17,6 +17,16 @@ describe('Stage', function(){
 		expect(stage.el.hasChildNodes()).toBe(true);
 	});
 
+	it('will only attach once', function(){
+		var stage = new Throwback.Stage();
+		var node = new Throwback.Node();
+
+		node.stage = 'mock';
+
+		stage.attach(node);
+		expect(stage.el.hasChildNodes()).toBe(false);
+	});
+
 	it('automatically attaches any stage children', function(){
 		var stage = new Throwback.Stage();
 

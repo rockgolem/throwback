@@ -18,6 +18,12 @@ describe('Entity', function(){
 		expect(entity.animations.walking).toEqual(jasmine.any(Throwback.Animation));
 	});
 
+	it('contains an empty animations object if one is not passed in', function(){
+		var entity = new Throwback.Entity();
+
+		expect(entity.animations).toEqual(jasmine.any(Object));
+	});
+
 	it('sets a default animation, and a current animation', function(){
 		var entity = new Throwback.Entity({
 			animations : { walking : animation },
@@ -37,6 +43,32 @@ describe('Entity', function(){
 		spyOn(animation, 'update');
 		entity.animate(10);
 		expect(animation.update).toHaveBeenCalledWith(10);
+	});
+
+	it('will render if the animation updates', function(){
+		var animation = new Throwback.Animation(sprite);
+		var entity = new Throwback.Entity({
+			animations : { walking : animation },
+			defaultAnimation : 'walking'
+		});
+		animation.sequence([0,1,2]);
+		spyOn(animation, 'update').andReturn(true);
+		spyOn(entity, 'render');
+		entity.animate(10);
+		expect(entity.render).toHaveBeenCalled();
+	});
+
+	it('will not do anything if the animation is not active', function(){
+		var animation = new Throwback.Animation(sprite);
+		var entity = new Throwback.Entity({
+			animations : { walking : animation },
+			defaultAnimation : 'walking'
+		});
+		animation.sequence([0,1,2]);
+		spyOn(animation, 'update');
+		animation.stop();
+		entity.animate(10);
+		expect(animation.update).not.toHaveBeenCalled();
 	});
 
 	it('renders to the current animation image', function(){

@@ -31,6 +31,26 @@ describe('Sprite', function(){
 		expect(sprite.getFrameCount()).toBe(50);
 	});
 
+	it('defaults to a frame size of 100% if one is not set', function(){
+		var sprite = new Throwback.Sprite({
+			width : 200,
+			height : 100
+		});
+		expect(sprite.get('frameHeight')).toBe(100);
+		expect(sprite.get('frameWidth')).toBe(200);
+	});
+
+	it('has a minimum frame size of 1px', function(){
+		var sprite = new Throwback.Sprite({
+			width : 200,
+			height : 100,
+			frameWidth : 0,
+			frameHeight : 0.5
+		});
+		expect(sprite.get('frameHeight')).toBe(1);
+		expect(sprite.get('frameWidth')).toBe(1);
+	});
+
 	it('can identify if a set of frames is valid', function(){
 		var sprite = new Throwback.Sprite({
 			img : 'someImage.jpg',
@@ -44,5 +64,12 @@ describe('Sprite', function(){
 
 		sprite = new Throwback.Sprite('someImage.jpg');
 		expect(sprite.verifyFrames([0])).toBe(true);
+	});
+
+	it('Throws an error if the image load fails', function(){
+		var sprite = new Throwback.Sprite({ width : 10, height : 10 });
+
+		sprite.config({ img : 'bogus.jpg' });
+		expect(sprite.image.onError).toThrow('Could not load image: bogus.jpg');
 	});
 });

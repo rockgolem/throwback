@@ -18,7 +18,7 @@ describe('Animation', function(){
 		});
 		anim = new Throwback.Animation(sprite);
 		waitsFor(function(){
-			return sprite.async.state() === 'resolved';
+			return sprite.async.state() !== 'pending';
 		}, 'The image should load or error, resolving the async property.', 750);
 		runs(function(){
 			expect(anim.getFrameCount()).toBe(1);
