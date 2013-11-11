@@ -1,5 +1,5 @@
 /**
- * throwback v0.0.1 - 2013-10-28
+ * throwback v0.0.1 - 2013-11-08
  * Retro Game Rendering Engine
  *
  * Copyright (c) 2013 Stephen Young <steve@rockgolem.com>
@@ -193,10 +193,9 @@
         constructor: function() {}
     });
     var Timer = Throwback.Timer = Base.extend();
-    var _render = function(delta) {
+    var _render = function(delta, now) {
         var length = _stagedNodes.length;
-        var i, k, position, transform, node, style, matrix;
-
+        var i, transform, node, style, matrix;
         for (i = 0; i < length; i++) {
             node = _stagedNodes[i];
 
@@ -214,6 +213,11 @@
             style = node.el.style;
             style["-webkit-transform"] = transform;
             style.transform = transform;
+
+            // process animations
+            if (node.animate) {
+                node.animate(now);
+            }
         }
     };
     /**
@@ -298,11 +302,17 @@
             _lag -= MS_PER_UPDATE;
         }
 
-        _render(_lag / MS_PER_UPDATE);
+        _render(_lag / MS_PER_UPDATE, now);
 
         requestAnimationFrame(_mainLoop);
     };
     var Node = Throwback.Node = Base.extend({
+
+        /**
+         * Adds another node as a child
+         *
+         * @param Node node
+         */
         addChild: function(node) {
             var stage;
 
@@ -315,6 +325,10 @@
                 stage.attach(node);
             }
         },
+
+        /**
+         * @constructor
+         */
         constructor: function() {
             var el;
             this.el = el = document.createElement('div');
@@ -322,11 +336,22 @@
             this.children = [];
             this.matrix = identityMatrix();
             this.position = [0, 0, 0, 1];
+            this.dirty = false;
             Throwback.jQuery(el).css({
                 position: 'absolute',
                 top: 0,
                 left: 0
             });
+        },
+
+        /**
+         * jQuery.css proxy
+         *
+         * @param Object options
+         * @return void
+         */
+        css: function(options) {
+            Throwback.jQuery(this.el).css(options);
         },
 
         /**
@@ -347,7 +372,11 @@
          * @return void
          */
         rotate: function(degree) {
-            return this.matrix = numeric.dot(this.matrix, rotationMatrix(degree));
+            var current = this.matrix[3];
+
+            this.move(-current[0], -current[1], -current[2]);
+            this.matrix = numeric.dot(this.matrix, rotationMatrix(degree));
+            return this.move.apply(this, current);
         },
 
         /**
@@ -387,7 +416,63 @@
             [1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [x, y, z, 1]
         ];
     };
-    var Entity = Throwback.Entity = Node.extend();
+    var Entity = Throwback.Entity = Node.extend({
+
+        /**
+         * Process entity animation
+         *
+         * @param Number now
+         * @return void
+         */
+        animate: function(now) {
+            var animation = this.currentAnimation;
+            if (animation && animation.on) {
+                if (animation.update(now)) {
+                    this.render();
+                }
+            }
+        },
+
+        constructor: function(config) {
+            var options = Throwback.jQuery.extend({}, config);
+
+            Node.call(this);
+            this.animations = options.animations || {};
+            this.defaultAnimation = options.defaultAnimation;
+            this.setAnimation();
+        },
+
+        /**
+         * Set the background image
+         *
+         * @return void
+         */
+        render: function() {
+            this.css({
+                backgroundPosition: this.currentAnimation.toString()
+            });
+        },
+
+        /**
+         * Sets the animation to one specified, or back to the default if not specified.
+         *
+         * @param String name
+         * @return void
+         */
+        setAnimation: function(name) {
+            var current = this.currentAnimation;
+            if (current) {
+                current.stop();
+            }
+            this.currentAnimation = current = this.animations[name || this.defaultAnimation];
+            if (current) {
+                current.start();
+                this.css({
+                    backgroundImage: current.getBackgroundImage()
+                });
+            }
+        }
+    });
     var Group = Throwback.Group = Node.extend();
     var Layer = Throwback.Layer = Node.extend();
     var Scene = Throwback.Scene = Node.extend();
@@ -460,6 +545,8 @@
         constructor: function(sprite) {
             var anim = this;
             this.sprite = sprite;
+            this.on = false;
+            this.currentFrame = 0;
             sprite.async.done(function() {
                 anim.sequence([0]);
             });
@@ -476,17 +563,105 @@
         },
 
         /**
-         * Limits the animation to certain frames
+         * Return string for backgroundImage
+         * @return {[type]}
+         */
+        getBackgroundImage: function() {
+            return 'url("' + this.sprite.image.src + '") ';
+        },
+
+        /**
+         * Limits the animation to certain frames, with a frames-per-second value
          *
          * @param Array frames
+         * @param Number fps
          * @return void
          */
-        sequence: function(frames) {
+        sequence: function(frames, fps) {
             if (this.sprite.verifyFrames(frames)) {
                 this.frames = frames;
+                this.fps = fps || 15;
+                this.frameTime = 1000 / this.fps;
             } else {
                 throw new Error('frames out of bounds');
             }
+        },
+
+        /**
+         * Turns the animation on
+         *
+         * @return void
+         */
+        start: function() {
+            this.previousFrameTime = (new Date()).getTime();
+            this.on = true;
+        },
+
+        /**
+         * Advance the current frame
+         *
+         * @return void
+         */
+        step: function() {
+            var current = this.currentFrame;
+            this.currentFrame = current === this.frames.length - 1 ? 0 : current + 1;
+        },
+
+        /**
+         * Turns the animation off
+         *
+         * @return void
+         */
+        stop: function() {
+            this.on = false;
+        },
+
+        /**
+         * Returns a CSS value for `background-position`
+         *
+         * @param void
+         * @return String
+         */
+        toString: function() {
+            var frame = this.frames[this.currentFrame];
+            var sprite = this.sprite;
+            var params = sprite.options;
+            var width = params.width;
+            var frameWidth = params.frameWidth;
+            var frameHeight = params.frameHeight;
+            var x = 0;
+            var y = 0;
+            var linear = frame * frameWidth;
+
+            while (linear >= width) {
+                linear -= width;
+                y += frameHeight;
+            }
+            x = -linear;
+            y = -y;
+            return x.toString() + 'px ' + y.toString() + 'px';
+        },
+
+        /**
+         * Compares the time against the previous time
+         * and advances the frame if needed.
+         *
+         * @param Number now
+         * @return void
+         */
+        update: function(now) {
+            var interval = now - this.previousFrameTime;
+            var frameTime = this.frameTime;
+            var updated = false;
+            while (interval >= frameTime) {
+                updated = true;
+                this.step();
+                interval -= frameTime;
+            }
+            if (updated) {
+                this.previousFrameTime = now;
+            }
+            return updated;
         }
     });
     var imageCache, makeImage, guessSize;
@@ -566,7 +741,7 @@
             var min, max;
             min = Math.min.apply(Math, frames);
             max = Math.max.apply(Math, frames);
-            return min >= 0 && max <= this.getFrameCount() - 1;
+            return min >= 0 && max <= Math.max(0, this.getFrameCount() - 1);
         }
     });
 
