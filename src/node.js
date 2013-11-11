@@ -52,7 +52,17 @@
 		 * @return Array
 		 */
 		move : function(x, y, z){
-			return this.matrix = numeric.dot(this.matrix, translationMatrix(x, y, z));
+			var children, i, length, matrix;
+
+			this.matrix = matrix = numeric.dot(this.matrix, translationMatrix(x, y, z));
+
+			children = this.children;
+			length = children.length;
+			for(i = 0; i < length; i++) {
+				children[i].move(x, y, z);
+			}
+
+			return matrix;
 		},
 
 		/**
@@ -76,7 +86,16 @@
 		 * @return void
 		 */
 		scale : function(s){
-			return this.matrix = numeric.dot(this.matrix, scaleMatrix(s));
+			var children, i, length, matrix;
+			this.matrix = matrix = numeric.dot(this.matrix, scaleMatrix(s));
+
+			children = this.children;
+			length = children.length;
+			for(i = 0; i < length; i++) {
+				children[i].scale(s);
+			}
+
+			return matrix;
 		}
 	});
 

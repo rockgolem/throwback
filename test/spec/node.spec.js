@@ -67,4 +67,34 @@ describe('Node', function(){
 			[0,0,0,1]
 		]);
 	});
+
+	it('moves any children', function(){
+		var parent = new Throwback.Node();
+		var child = new Throwback.Node();
+
+		parent.addChild(child);
+		child.move(2, 4);
+		parent.move(3, 5);
+		expect(child.matrix).toEqual([
+			[1,0,0,0],
+			[0,1,0,0],
+			[0,0,1,0],
+			[5,9,0,1]
+		]);
+	});
+
+	it('scales any children', function(){
+		var parent = new Throwback.Node();
+		var child = new Throwback.Node();
+
+		parent.addChild(child);
+		child.scale(2);
+		parent.scale(3);
+		expect(child.matrix).toEqual([
+			[6,0,0,0],
+			[0,6,0,0],
+			[0,0,6,0],
+			[0,0,0,1]
+		]);
+	});
 });
