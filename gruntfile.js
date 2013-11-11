@@ -75,26 +75,27 @@ module.exports = function(grunt) {
                 dest : config.dist
             },
             vendor : {
-                src : [
-                    'vendor/requestAnimationFrame.js',
-                    config.dist,
-                    'vendor/numeric.js'
-                ],
+                src : [ 'vendor/requestAnimationFrame.js', config.dist ],
                 dest : config.dist
-            },
+            }/*,
             vendorMin : {
                 src : [
                     config.minifiedName,
                     'vendor/numeric.min.js'
                 ],
                 dest : config.minifiedName
-            }
+            }*/
         },
         copy : {
             example : {
                 files : [
+                    /* vendor files */
+                    { 'dist/numeric.min.js' : 'vendor/numeric.min.js' },
+
+                    /* example files */
                     { 'examples/js/throwback-latest.js' : config.dist },
                     { 'examples/js/jquery.min.js' : 'vendor/jquery.min.js' },
+                    { 'examples/js/numeric.min.js' : 'vendor/numeric.min.js' },
                     { 'examples/css/throwback.css' : config.distCss }
                 ]
             }
@@ -128,6 +129,7 @@ module.exports = function(grunt) {
                     },
                     vendor : [
                         'vendor/jquery.min.js',
+                        'vendor/numeric.min.js',
                         'http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.2/underscore-min.js'
                     ]
                 }
@@ -175,7 +177,6 @@ module.exports = function(grunt) {
     // Default task.
     grunt.registerTask('default', [
         'clean', 'concat:src', 'jshint', 'concat:vendor',
-        'uglify', 'jsbeautifier', 'concat:vendorMin',
-        'cssmin', 'copy', 'jasmine'
+        'uglify', 'jsbeautifier', 'cssmin', 'copy', 'jasmine'
     ]);
 };

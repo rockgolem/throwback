@@ -35,6 +35,9 @@
     "grunt-jsbeautifier": "~0.2.2",
     "grunt-template-jasmine-istanbul": "~0.2.5"
   },
-  "bundledDependencies": [],
+  "bundledDependencies": [
+    "jquery",
+    "numeric"
+  ],
   "license": "MIT"
 }
