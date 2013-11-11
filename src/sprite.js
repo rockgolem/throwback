@@ -89,21 +89,19 @@
 		var sprite = this,
 			image = this.image;
 
-		if (image){
-			this.async.done(function(){
-				var el, width, height;
+		this.async.done(function(){
+			var el, width, height;
 
-				el = Throwback.jQuery(image);
-				width = sprite.get('width') || el.width();
-				height = sprite.get('height') || el.height();
-				sprite.config({
-					width : width,
-					height : height,
-					frameWidth : sprite.get('frameWidth') || width || 1,
-					frameHeight : sprite.get('frameHeight') || height || 1
-				});
+			el = Throwback.jQuery(image);
+			width = sprite.get('width') || el.width();
+			height = sprite.get('height') || el.height();
+			sprite.config({
+				width : width,
+				height : height,
+				frameWidth : sprite.get('frameWidth') || width || 1,
+				frameHeight : sprite.get('frameHeight') || height || 1
 			});
-		}
+		});
 	};
 
 	/**
