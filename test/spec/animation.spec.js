@@ -132,7 +132,7 @@ describe('Animation', function(){
 		expect(anim.toString()).toMatch(/\-80px\s0px/);
 	});
 
-	it('producces a backgroundImage url for CSS', function(){
+	it('produces a backgroundImage url for CSS', function(){
 		var sprite = new Throwback.Sprite({
 			img : 'someImage.jpg',
 			width : 200,

@@ -18,11 +18,21 @@
 
 		constructor : function(config){
 			var options = Throwback.jQuery.extend({}, config);
+			var animations = options.animations;
+			var sprite = options.sprite;
 
 			Node.call(this);
-			this.animations = options.animations || {};
-			this.setDefaultAnimation(options.defaultAnimation);
-			this.setAnimation();
+
+			this.sprite = sprite;
+			if (sprite){
+				this.styleFromSprite();
+			}
+
+			this.animations = animations || {};
+			if (animations){
+				this.setDefaultAnimation(options.defaultAnimation);
+				this.setAnimation();
+			}
 		},
 
 		/**
@@ -44,13 +54,19 @@
 		 */
 		setAnimation : function(name){
 			var current = this.currentAnimation;
+			var sprite;
 			if (current){
 				current.stop();
 			}
 			this.currentAnimation = current = this.animations[name || this.defaultAnimation];
 			if (current){
 				current.start();
-				this.css({ backgroundImage : current.getBackgroundImage() });
+				sprite = current.sprite;
+				this.css({
+					width : sprite.get('frameWidth'),
+					height : sprite.get('frameHeight'),
+					backgroundImage : current.getBackgroundImage()
+				});
 			}
 		},
 
@@ -68,6 +84,24 @@
 			} else {
 				defaultSet = animations.defaultAnimation ? 'defaultAnimation' : false;
 				this.defaultAnimation = defaultSet || Object.keys(animations)[0];
+			}
+		},
+
+		/**
+		 * Styles the node based on the provided sprite, or the current sprite
+		 *
+		 * @param Sprite spriteParam
+		 * @return void
+		 */
+		styleFromSprite : function(spriteParam){
+			var sprite = spriteParam || this.sprite;
+
+			if (sprite){
+				this.css({
+					height : sprite.get('frameHeight'),
+					width : sprite.get('frameWidth'),
+					backgroundImage : 'url("' + sprite.image.src + '")',
+				});
 			}
 		}
 	});
