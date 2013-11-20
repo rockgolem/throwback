@@ -1,5 +1,5 @@
 /**
- * throwback v0.0.1 - 2013-11-13
+ * throwback v0.0.1 - 2013-11-20
  * Retro Game Rendering Engine
  *
  * Copyright (c) 2013 Stephen Young <steve@rockgolem.com>
@@ -343,11 +343,32 @@
         /**
          * jQuery.css proxy
          *
-         * @param Object options
+         * Can style child nodes via the options object
+         *
+         * @param Object styles
+         * @param Object options { children : Boolean, onlyChildren : Boolean }
          * @return void
          */
-        css: function(options) {
-            Throwback.jQuery(this.el).css(options);
+        css: function(styles, options) {
+            var $ = Throwback.jQuery;
+            var i, length, children;
+
+            options = $.extend({}, {
+                children: false,
+                onlyChildren: false
+            }, options);
+            if (options.children || options.onlyChildren) {
+                children = this.children;
+                length = children.length;
+                for (i = 0; i < length; i++) {
+                    children[i].css(styles, {
+                        children: true
+                    });
+                }
+            }
+            if (!options.onlyChildren) {
+                $(this.el).css(styles);
+            }
         },
 
         /**
@@ -450,11 +471,21 @@
 
         constructor: function(config) {
             var options = Throwback.jQuery.extend({}, config);
+            var animations = options.animations;
+            var sprite = options.sprite;
 
             Node.call(this);
-            this.animations = options.animations || {};
-            this.defaultAnimation = options.defaultAnimation;
-            this.setAnimation();
+
+            this.sprite = sprite;
+            if (sprite) {
+                this.styleFromSprite();
+            }
+
+            this.animations = animations || {};
+            if (animations) {
+                this.setDefaultAnimation(options.defaultAnimation);
+                this.setAnimation();
+            }
         },
 
         /**
@@ -476,14 +507,53 @@
          */
         setAnimation: function(name) {
             var current = this.currentAnimation;
+            var sprite;
             if (current) {
                 current.stop();
             }
             this.currentAnimation = current = this.animations[name || this.defaultAnimation];
             if (current) {
                 current.start();
+                sprite = current.sprite;
                 this.css({
+                    width: sprite.get('frameWidth'),
+                    height: sprite.get('frameHeight'),
                     backgroundImage: current.getBackgroundImage()
+                });
+            }
+        },
+
+        /**
+         * Sets the default animation if specified, or tries to derrive it.
+         *
+         * @param String name
+         */
+        setDefaultAnimation: function(name) {
+            var animations, defaultSet;
+
+            animations = this.animations;
+            if (name) {
+                this.defaultAnimation = name;
+            } else {
+                defaultSet = animations.defaultAnimation ? 'defaultAnimation' : false;
+                this.defaultAnimation = defaultSet || Object.keys(animations)[0];
+            }
+        },
+
+        /**
+         * Styles the node based on the provided sprite, or the current sprite
+         *
+         * @param Sprite spriteParam
+         * @return void
+         */
+        styleFromSprite: function(spriteParam) {
+            var sprite = spriteParam || this.sprite;
+
+            if (sprite) {
+                this.css({
+                    height: sprite.get('frameHeight'),
+                    width: sprite.get('frameWidth'),
+                    backgroundImage: 'url("' + sprite.image.src + '")',
                 });
             }
         }

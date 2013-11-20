@@ -15,12 +15,10 @@
 		});
 		var PlayerAnimation = new Throwback.Animation(PlayerSprite);
 		var player = new Throwback.Entity({
-			animations : { walking : PlayerAnimation },
-			defaultAnimation : 'walking'
+			animations : { walking : PlayerAnimation }
 		});
 
 		PlayerAnimation.sequence([0, 1, 2, 3], 4);
-		player.css({ width: 32, height : 48 });
 		player.move(100, 100);
 		game.stage.addChild(player);
 
