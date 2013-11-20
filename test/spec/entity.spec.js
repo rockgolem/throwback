@@ -33,11 +33,26 @@ describe('Entity', function(){
 		expect(entity.currentAnimation).toBe(animation);
 	});
 
+	it('will set a default animation named defaultAnimation', function(){
+		var entity = new Throwback.Entity({
+			animations : { defaultAnimation : animation }
+		});
+
+		expect(entity.currentAnimation).toBe(animation);
+	});
+
+	it('will set a default animation if one is not specified', function(){
+		var entity = new Throwback.Entity({
+			animations : { walking : animation }
+		});
+
+		expect(entity.currentAnimation).toBe(animation);
+	});
+
 	it("can make it's animation update", function(){
 		var animation = new Throwback.Animation(sprite);
 		var entity = new Throwback.Entity({
-			animations : { walking : animation },
-			defaultAnimation : 'walking'
+			animations : { walking : animation }
 		});
 		animation.sequence([0,1,2]);
 		spyOn(animation, 'update');
@@ -48,8 +63,7 @@ describe('Entity', function(){
 	it('will render if the animation updates', function(){
 		var animation = new Throwback.Animation(sprite);
 		var entity = new Throwback.Entity({
-			animations : { walking : animation },
-			defaultAnimation : 'walking'
+			animations : { walking : animation }
 		});
 		animation.sequence([0,1,2]);
 		spyOn(animation, 'update').andReturn(true);
@@ -61,8 +75,7 @@ describe('Entity', function(){
 	it('will not do anything if the animation is not active', function(){
 		var animation = new Throwback.Animation(sprite);
 		var entity = new Throwback.Entity({
-			animations : { walking : animation },
-			defaultAnimation : 'walking'
+			animations : { walking : animation }
 		});
 		animation.sequence([0,1,2]);
 		spyOn(animation, 'update');
@@ -73,8 +86,7 @@ describe('Entity', function(){
 
 	it('renders to the current animation image', function(){
 		var entity = new Throwback.Entity({
-			animations : { walking : animation },
-			defaultAnimation : 'walking'
+			animations : { walking : animation }
 		});
 
 		spyOn(entity, 'css');

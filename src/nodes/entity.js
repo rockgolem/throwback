@@ -21,7 +21,7 @@
 
 			Node.call(this);
 			this.animations = options.animations || {};
-			this.defaultAnimation = options.defaultAnimation;
+			this.setDefaultAnimation(options.defaultAnimation);
 			this.setAnimation();
 		},
 
@@ -51,6 +51,23 @@
 			if (current){
 				current.start();
 				this.css({ backgroundImage : current.getBackgroundImage() });
+			}
+		},
+
+		/**
+		 * Sets the default animation if specified, or tries to derrive it.
+		 *
+		 * @param String name
+		 */
+		setDefaultAnimation : function(name){
+			var animations, defaultSet;
+
+			animations = this.animations;
+			if (name){
+				this.defaultAnimation = name;
+			} else {
+				defaultSet = animations.defaultAnimation ? 'defaultAnimation' : false;
+				this.defaultAnimation = defaultSet || Object.keys(animations)[0];
 			}
 		}
 	});
