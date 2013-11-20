@@ -37,11 +37,27 @@
 		/**
 		 * jQuery.css proxy
 		 *
-		 * @param Object options
+		 * Can style child nodes via the options object
+		 *
+		 * @param Object styles
+		 * @param Object options { children : Boolean, onlyChildren : Boolean }
 		 * @return void
 		 */
-		css : function(options){
-			Throwback.jQuery(this.el).css(options);
+		css : function(styles, options){
+			var $ = Throwback.jQuery;
+			var i, length, children;
+
+			options = $.extend({}, { children : false, onlyChildren : false }, options);
+			if (options.children || options.onlyChildren){
+				children = this.children;
+				length = children.length;
+				for(i = 0; i < length; i++) {
+					children[i].css(styles, { children : true });
+				}
+			}
+			if(!options.onlyChildren){
+				$(this.el).css(styles);
+			}
 		},
 
 		/**

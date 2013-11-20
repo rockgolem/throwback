@@ -35,6 +35,27 @@ describe('Node', function(){
 		expect(node.el.style.height).toBe('75px');
 	});
 
+	it("can style it's own node, it's children, or both", function(){
+		var node = new Throwback.Node();
+		var child = new Throwback.Node();
+		var nodeStyle = node.el.style;
+		var childStyle = child.el.style;
+
+		node.addChild(child);
+
+		node.css({ fontSize : '20px' });
+		expect(nodeStyle.fontSize).toBe('20px');
+		expect(childStyle.fontSize).not.toBe('20px');
+
+		node.css({ fontSize : '25px' }, { children : true });
+		expect(nodeStyle.fontSize).toBe('25px');
+		expect(childStyle.fontSize).toBe('25px');
+
+		node.css({ fontSize : '30px' }, { onlyChildren : true });
+		expect(nodeStyle.fontSize).not.toBe('30px');
+		expect(childStyle.fontSize).toBe('30px');
+	});
+
 	it('can be moved', function(){
 		var node = new Throwback.Node();
 		node.move(12, 87);
