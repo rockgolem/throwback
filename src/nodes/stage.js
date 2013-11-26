@@ -1,4 +1,4 @@
-	/* globals Throwback, Scene, Node:true */
+	/* globals Throwback, Node:true */
 	var attachStage, _stagedNodes;
 
 	/**
