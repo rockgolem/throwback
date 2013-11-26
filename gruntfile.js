@@ -34,8 +34,6 @@ module.exports = function(grunt) {
                 'src/nodes/*',
                 'src/animation.js',
                 'src/sprite.js',
-                'src/audio.js',
-                'src/audio/*',
                 'src/chrome/export.js',
                 'src/chrome/outro.js'
             ],
