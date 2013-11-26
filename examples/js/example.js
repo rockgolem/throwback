@@ -13,6 +13,7 @@
 			frameWidth : 32,
 			frameHeight : 48
 		});
+
 		var PlayerAnimation = new Throwback.Animation(PlayerSprite);
 		var player = new Throwback.Entity({
 			animations : { walking : PlayerAnimation }

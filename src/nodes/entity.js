@@ -9,10 +9,8 @@
 		 */
 		animate : function(now){
 			var animation = this.currentAnimation;
-			if (animation && animation.on){
-				if(animation.update(now)) {
-					this.render();
-				}
+			if (animation && animation.on && animation.update(now)) {
+				this.el.style.backgroundPosition = animation.toString();
 			}
 		},
 
@@ -33,17 +31,6 @@
 				this.setDefaultAnimation(options.defaultAnimation);
 				this.setAnimation();
 			}
-		},
-
-		/**
-		 * Set the background image
-		 *
-		 * @return void
-		 */
-		render : function(){
-			this.css({
-				backgroundPosition : this.currentAnimation.toString()
-			});
 		},
 
 		/**

@@ -88,15 +88,12 @@
 		 * @return String
 		 */
 		toString : function(){
-			var frame = this.frames[this.currentFrame];
-			var sprite = this.sprite;
-			var params = sprite.options;
+			var params = this.sprite.options;
 			var width = params.width;
-			var frameWidth = params.frameWidth;
 			var frameHeight = params.frameHeight;
-			var x = 0;
+			var x;
 			var y = 0;
-			var linear = frame * frameWidth;
+			var linear = this.frames[this.currentFrame] * params.frameWidth;
 
 			while(linear >= width) {
 				linear -= width;

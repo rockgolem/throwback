@@ -86,18 +86,6 @@ describe('Entity', function(){
 			expect(animation.update).toHaveBeenCalledWith(10);
 		});
 
-		it('will render if the animation updates', function(){
-			var animation = new Throwback.Animation(sprite);
-			var entity = new Throwback.Entity({
-				animations : { walking : animation }
-			});
-			animation.sequence([0,1,2]);
-			spyOn(animation, 'update').andReturn(true);
-			spyOn(entity, 'render');
-			entity.animate(10);
-			expect(entity.render).toHaveBeenCalled();
-		});
-
 		it('will not do anything if the animation is not active', function(){
 			var animation = new Throwback.Animation(sprite);
 			var entity = new Throwback.Entity({
@@ -108,17 +96,6 @@ describe('Entity', function(){
 			animation.stop();
 			entity.animate(10);
 			expect(animation.update).not.toHaveBeenCalled();
-		});
-
-		it('renders to the current animation image', function(){
-			var entity = new Throwback.Entity({
-				animations : { walking : animation }
-			});
-
-			spyOn(entity, 'css');
-			entity.render();
-			expect(entity.css).toHaveBeenCalled();
-			expect(entity.el.style.backgroundImage).toMatch(/url\("?.+someImage.jpg"?\)/);
 		});
 
 		it('will stop the current animation if a new one is selected', function(){

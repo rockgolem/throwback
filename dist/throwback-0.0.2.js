@@ -1,5 +1,5 @@
 /**
- * throwback v0.0.2 - 2013-11-20
+ * throwback v0.0.2 - 2013-11-25
  * Retro Game Rendering Engine
  *
  * Copyright (c) 2013 Stephen Young <steve@rockgolem.com>
@@ -192,23 +192,23 @@
     var _render = function(delta, now) {
         var length = _stagedNodes.length;
         var i, transform, node, style, matrix;
+
         for (i = 0; i < length; i++) {
             node = _stagedNodes[i];
 
-            matrix = node.matrix;
+            if (node.dirty) {
+                node.dirty = false;
+                matrix = node.matrix;
 
-            transform = 'matrix3d(';
-            transform += [
-                matrix[0].join(','),
-                matrix[1].join(','),
-                matrix[2].join(','),
-                matrix[3].join(',')
-            ].join(',');
-            transform += ')';
+                transform = 'matrix3d(' +
+                    matrix[0].join(',') + ',' +
+                    matrix[1].join(',') + ',' +
+                    matrix[2].join(',') + ',' +
+                    matrix[3].join(',') + ')';
 
-            style = node.el.style;
-            style["-webkit-transform"] = transform;
-            style.transform = transform;
+                style = node.el.style;
+                style.webkitTransform = style.transform = transform;
+            }
 
             // process animations
             if (node.animate) {
@@ -302,6 +302,21 @@
 
         requestAnimationFrame(_mainLoop);
     };
+    /**
+     * Object used in Node.prototype.css method.  Extracted for memory performance.
+     *
+     * @type Object
+     */
+    var includeChildren = {
+        children: true
+    };
+
+    var defaultNodeStyle = {
+        position: 'absolute',
+        top: 0,
+        left: 0
+    };
+
     var Node = Throwback.Node = Base.extend({
 
         /**
@@ -330,14 +345,10 @@
             this.el = el = document.createElement('div');
             this.parent = null;
             this.children = [];
-            this.matrix = identityMatrix();
-            this.position = [0, 0, 0, 1];
+            this.matrix = identityMatrix.slice();
+            this.position = identityMatrix[3].slice();
             this.dirty = false;
-            Throwback.jQuery(el).css({
-                position: 'absolute',
-                top: 0,
-                left: 0
-            });
+            Throwback.jQuery(el).css(defaultNodeStyle);
         },
 
         /**
@@ -350,24 +361,17 @@
          * @return void
          */
         css: function(styles, options) {
-            var $ = Throwback.jQuery;
             var i, length, children;
 
-            options = $.extend({}, {
-                children: false,
-                onlyChildren: false
-            }, options);
-            if (options.children || options.onlyChildren) {
+            if (options && (options.children || options.onlyChildren)) {
                 children = this.children;
                 length = children.length;
                 for (i = 0; i < length; i++) {
-                    children[i].css(styles, {
-                        children: true
-                    });
+                    children[i].css(styles, includeChildren);
                 }
             }
-            if (!options.onlyChildren) {
-                $(this.el).css(styles);
+            if (!options || !options.onlyChildren) {
+                Throwback.jQuery(this.el).css(styles);
             }
         },
 
@@ -381,14 +385,14 @@
         move: function(x, y, z) {
             var children, i, length, matrix;
 
-            this.matrix = matrix = numeric.dot(this.matrix, translationMatrix(x, y, z));
+            this.matrix = matrix = numeric.dotMMsmall(this.matrix, translationMatrix(x, y, z));
 
             children = this.children;
             length = children.length;
             for (i = 0; i < length; i++) {
                 children[i].move(x, y, z);
             }
-
+            this.dirty = true;
             return matrix;
         },
 
@@ -402,7 +406,7 @@
             var current = this.matrix[3];
 
             this.move(-current[0], -current[1], -current[2]);
-            this.matrix = numeric.dot(this.matrix, rotationMatrix(degree));
+            this.matrix = numeric.dotMMsmall(this.matrix, rotationMatrix(degree));
             return this.move.apply(this, current);
         },
 
@@ -414,42 +418,48 @@
          */
         scale: function(s) {
             var children, i, length, matrix;
-            this.matrix = matrix = numeric.dot(this.matrix, scaleMatrix(s));
+            this.matrix = matrix = numeric.dotMMsmall(this.matrix, scaleMatrix(s));
 
             children = this.children;
             length = children.length;
             for (i = 0; i < length; i++) {
                 children[i].scale(s);
             }
-
+            this.dirty = true;
             return matrix;
         }
     });
 
-    var identityMatrix = function() {
-        return [
-            [1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]
-        ];
-    };
+    var identityMatrix = [
+        [1, 0, 0, 0],
+        [0, 1, 0, 0],
+        [0, 0, 1, 0],
+        [0, 0, 0, 1]
+    ];
 
     var rotationMatrix = function(degree) {
         var cos = Math.cos;
         var sin = Math.sin;
         return [
-            [cos(degree), sin(-degree), 0, 0], [sin(degree), cos(degree), 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]
+            [cos(degree), sin(-degree), 0, 0], [sin(degree), cos(degree), 0, 0],
+            identityMatrix[2],
+            identityMatrix[3]
         ];
     };
 
     var scaleMatrix = function(s) {
         return [
-            [s, 0, 0, 0], [0, s, 0, 0], [0, 0, s, 0], [0, 0, 0, 1]
+            [s, 0, 0, 0], [0, s, 0, 0], [0, 0, s, 0],
+            identityMatrix[3]
         ];
     };
 
     var translationMatrix = function(x, y, z) {
         z = z || 0;
         return [
-            [1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [x, y, z, 1]
+            identityMatrix[0],
+            identityMatrix[1],
+            identityMatrix[2], [x, y, z, 1]
         ];
     };
     var Entity = Throwback.Entity = Node.extend({
@@ -462,10 +472,8 @@
          */
         animate: function(now) {
             var animation = this.currentAnimation;
-            if (animation && animation.on) {
-                if (animation.update(now)) {
-                    this.render();
-                }
+            if (animation && animation.on && animation.update(now)) {
+                this.el.style.backgroundPosition = animation.toString();
             }
         },
 
@@ -486,17 +494,6 @@
                 this.setDefaultAnimation(options.defaultAnimation);
                 this.setAnimation();
             }
-        },
-
-        /**
-         * Set the background image
-         *
-         * @return void
-         */
-        render: function() {
-            this.css({
-                backgroundPosition: this.currentAnimation.toString()
-            });
         },
 
         /**
@@ -708,15 +705,12 @@
          * @return String
          */
         toString: function() {
-            var frame = this.frames[this.currentFrame];
-            var sprite = this.sprite;
-            var params = sprite.options;
+            var params = this.sprite.options;
             var width = params.width;
-            var frameWidth = params.frameWidth;
             var frameHeight = params.frameHeight;
-            var x = 0;
+            var x;
             var y = 0;
-            var linear = frame * frameWidth;
+            var linear = this.frames[this.currentFrame] * params.frameWidth;
 
             while (linear >= width) {
                 linear -= width;
