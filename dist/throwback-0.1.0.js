@@ -1,5 +1,5 @@
 /**
- * throwback v0.0.2 - 2013-11-25
+ * throwback v0.1.0 - 2013-11-25
  * Retro Game Rendering Engine
  *
  * Copyright (c) 2013 Stephen Young <steve@rockgolem.com>

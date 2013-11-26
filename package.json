@@ -1,6 +1,6 @@
 {
   "name": "throwback",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "author": "Stephen Young <steve@rockgolem.com>",
   "description": "Retro Game Rendering Engine",
   "contributors": [
@@ -9,7 +9,7 @@
       "email": "steve@rockgolem.com"
     }
   ],
-  "main": "dist/throwback-0.0.2.min.js",
+  "main": "dist/throwback-0.1.0.min.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/rockgolem/throwback"
