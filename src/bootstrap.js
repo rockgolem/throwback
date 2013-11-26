@@ -1,4 +1,4 @@
-	/* globals Throwback, Base */
+	/* globals Throwback */
 
 	/**
 	 * Discourage global use of jQuery
