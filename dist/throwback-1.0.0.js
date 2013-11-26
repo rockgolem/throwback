@@ -1,5 +1,5 @@
 /**
- * throwback v0.1.0 - 2013-11-25
+ * throwback v1.0.0 - 2013-11-25
  * Retro Game Rendering Engine
  *
  * Copyright (c) 2013 Stephen Young <steve@rockgolem.com>
@@ -188,7 +188,6 @@
     if (jQuery) {
         Throwback.jQuery = jQuery.noConflict();
     }
-    var Timer = Throwback.Timer = Base.extend();
     var _render = function(delta, now) {
         var length = _stagedNodes.length;
         var i, transform, node, style, matrix;
@@ -555,9 +554,6 @@
             }
         }
     });
-    var Group = Throwback.Group = Node.extend();
-    var Layer = Throwback.Layer = Node.extend();
-    var Scene = Throwback.Scene = Node.extend();
     var attachStage, _stagedNodes;
 
     /**
@@ -880,9 +876,6 @@
         };
         return img;
     };
-    var Audio = Throwback.Audio = Base.extend();
-    var Music = Throwback.Music = Audio.extend();
-    var Sound = Throwback.Sound = Audio.extend();
     if (typeof exports !== 'undefined' && typeof module !== 'undefined' && module.exports) {
         exports = module.exports = Throwback;
     } else {
