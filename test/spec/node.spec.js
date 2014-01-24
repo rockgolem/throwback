@@ -1,4 +1,4 @@
-/* globals describe, it, expect, jasmine, Throwback */
+/* globals describe, it, expect, jasmine, Throwback, waitsFor, runs */
 describe('Node', function(){
 	it('can add nodes to a list of children', function(){
 		var node = new Throwback.Node();
@@ -117,5 +117,23 @@ describe('Node', function(){
 			[0,0,6,0],
 			[0,0,0,1]
 		]);
+	});
+
+	it('can move over time', function(){
+		var node = new Throwback.Node();
+		var result = [
+			[1,0,0,0],
+			[0,1,0,0],
+			[0,0,1,0],
+			[12,87,0,1]
+		];
+		node.moveTo(12, 87, 1000);
+		expect(node.matrix).not.toEqual(result);
+		waitsFor(function(){
+			return node.matrix[3][0] === 12;
+		});
+		runs(function(){
+			expect(node.matrix).toEqual(result);
+		});
 	});
 });

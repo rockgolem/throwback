@@ -89,6 +89,18 @@
 		},
 
 		/**
+		 * Move (translate) the node over time
+		 *
+		 * @param Number x units of movement relative to the current position
+		 * @param Number y units of movement relative to the current position
+		 * @param Number time in milliseconds
+		 * @return Array
+		 */
+		moveTo : function(x, y, time){
+
+		},
+
+		/**
 		 * Rotate the node
 		 *
 		 * @param Number s
