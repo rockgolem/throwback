@@ -7,7 +7,7 @@
 		 * Sprite Animation Example
 		 */
 		var PlayerSprite = new Throwback.Sprite({
-			img : '/img/steampunk_f10.png',
+			img : 'img/steampunk_f10.png',
 			width : 128,
 			height : 192,
 			frameWidth : 32,
